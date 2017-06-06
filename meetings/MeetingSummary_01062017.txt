@@ -1,0 +1,50 @@
+MSc Project - Geospatial Database Meeting
+Costa, STFC Daresbury
+01/06/2017
+
+Key Points:
+
+-> The main goal of the project is to create the basis for an application that will be used
+   to help visually impaired users to explore new areas with confidence and so improve quality
+   of life. The trial area used for development will be the Liverpool University campus, both
+   outdoors and parts of the indoor environment. Slightly more than this, a broader aim is to
+   create a standard for data collection and classification for this purpose.
+
+-> A mini literature review needs to be carried out as the state of the art has most likely
+   changed since Neil's work with the RNC. Mentioned were Google and Apple's advancement in
+   the domain of accessibility.
+
+-> A key idea for the database is that is should not be overpopulated with objects of interest;
+   an important aspect of any application designed to help the visually impaired is combatting
+   so called "information overload", as highlighted by Neil's work with the RNC.
+
+-> It could interface with Streetview and/or openstreetmap.org depending on the flexibility
+   of available APIs. Since the final product will be mobile, the C++ application would aim
+   to populate a mobile friendly database. Google Streetview has the ability to upload 360
+   degree photospheres - these could be used as the main input data to a fast machine learning
+   algorithm to classify objects of interest.
+
+-> Put forward the idea to Jason's upcoming employer, Arup, if a KTP would be something they
+   would be interested in
+
+Key ideas from the journey back to Liverpool:
+
+-> It may be worth collecting data with depth information instead of trying to apply a given
+   machine learning algorithm to 360 degree photoshere 2D images. It is unlikely there will
+   be many objects of interest above or directly below the user, so perhaps an approach using
+   a Google Tango powered device may be effective. Tango devices can measure distances to
+   within a few centimetres so would be useful for measuring the height of steps/kerbsides
+   (a particular area of interest that came up in the meeting)
+
+Next Tasks:
+
+-> Conduct a brief literature review on the current state of the art of accessibility options
+   in the domain of indoor/outdoor mapping. (Google's latest I/O conference introduced VPS -
+   a particular area of interest)
+
+-> Set up a Slack team (complete)
+
+-> Check if Liverpool University have a license to release on the Apple App Store
+
+
+
