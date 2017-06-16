@@ -1,0 +1,50 @@
+MSc Project - Geospatial Database Meeting
+Room 221 Ashton: Vitaliy, Jason
+Somewhere in the land of Mexico: Sandra (via Skype)
+STFC: Neil (via Skype)
+16/06/2017
+
+Key Points:
+
+-> Decision was made to focus on outdoor mapping of the Liverpool campus for the project:
+   indoor mapping would be difficult to implement because of possible departmental access
+   issues and also the issue of multi-floor navigation. Inside a bulding a VI user would
+   need to have access to a Tango device to verify which level they are on in areas without
+   widespread use of emitter/sensor infrastructure as discussed in a few papers covered in the
+   first literature review. 
+
+-> All parties seemed to be interested in a VPS-like system. Therefore a Tango device or
+   devices will need to be acquired for the project. Neil has links with Lenovo who currently
+   manufacture the only available Tango enabled device, the Lenovo Phab 2 Pro. Devices may
+   be available for loan. The depth information that can be captured by the IR emitter/receiver would
+   be useful for macro level feature identification with an as-yet unspecified machine learning
+   algorithm(s).
+
+-> A preference for OSM was also discussed to fit in with the open source/open availability ethos.
+
+-> A possibly strategy was identified whereby geocoded photospheres could be uploaded to the Street View
+   servers, downloaded back from Google via the Street View API and then linked to map data from OSM.
+
+-> For obstacles that appear while a VI user is following a route a photo could be taken by holding the user's
+   smartphone to their chest in a similar fashion to the now defunct app "Beme". This 2D image could then be
+   analysed to update the database so that other VI users would know what to expect on the path ahead.
+
+Tasks Carried Over From Previous Meeting:
+
+-> Liverpool University must have an iOS developer license otherwise the widely used timetable app
+   wouldn't exist.
+
+-> Brief literature review complete.
+
+Next Tasks:
+
+-> Investigate the time taken between an photosphere upload to Street View and approval by
+   Google. Google may pass each sphere through some sort of machine learning algorithm to
+   identify e.g. faces and numberplates and blur them out to anonymise them (6 spheres uploaded to date,
+   awaiting results).
+
+-> Device a high level project plan. To that end, investigate the OSM API to see what can be
+   pulled from the OSM database and in what form and also the Street View API, both of which are
+   free to use. Perhaps conduct a survey of databases that could be used in a client/server
+   architecture for the final product. Something with JSON would be good. After this is completed
+   work out the workload between Sandra and Jason.
