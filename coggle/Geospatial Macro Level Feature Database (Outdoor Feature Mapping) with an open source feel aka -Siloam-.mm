@@ -1,11 +1,15 @@
 
 <map version="0.9.0">
-    <node TEXT="Geospatial Macro Level Feature Database (Outdoor Feature Mapping)" FOLDED="false">
+    <node TEXT="Geospatial Macro Level Feature Database (Outdoor Feature Mapping) with an open source feel aka &quot;Siloam&quot;" FOLDED="false">
         <edge COLOR="#b4b4b4" />
         <font NAME="Helvetica" SIZE="10" />
         <node TEXT="New Obstacles" FOLDED="false" POSITION="left">
             <edge COLOR="#efa670" />
             <font NAME="Helvetica" SIZE="10" />
+            <node TEXT="Don't necessarily need to fully classify the obstacle - might just be &quot;an obstacle&quot; for the scope of this particular project" FOLDED="false">
+                <edge COLOR="#f0aa79" />
+                <font NAME="Helvetica" SIZE="10" />
+            </node>
             <node TEXT="Another machine learning method without depth information (i.e. 2D feature detection) - might include some sign recognition? ANN OCR?" FOLDED="false">
                 <edge COLOR="#efa776" />
                 <font NAME="Helvetica" SIZE="10" />
@@ -30,7 +34,7 @@
                 <edge COLOR="#5cd6bf" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
-            <node TEXT="Needs to learn where doors are" FOLDED="false">
+            <node TEXT="Needs to learn where entrances to buildings are" FOLDED="false">
                 <edge COLOR="#64d6c1" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
@@ -87,7 +91,7 @@
                     <font NAME="Helvetica" SIZE="10" />
                 </node>
             </node>
-            <node TEXT="2D images downloaded back from StreetView [Point of re-download?](#035691)" FOLDED="false">
+            <node TEXT="2D images downloaded back from StreetView [Point of re-download](#035691)" FOLDED="false">
                 <edge COLOR="#a4d870" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
@@ -103,9 +107,13 @@
                 <edge COLOR="#ebd761" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
-            <node TEXT="Present route with features" FOLDED="false">
+            <node TEXT="Present route with features to user" FOLDED="false">
                 <edge COLOR="#edd961" />
                 <font NAME="Helvetica" SIZE="10" />
+                <node TEXT="Routes via Mapzen or GraphHopper (both of which are proven to work with OSM)" FOLDED="false">
+                    <edge COLOR="#ecd456" />
+                    <font NAME="Helvetica" SIZE="10" />
+                </node>
                 <node TEXT="Might need further (supervised) machine learning to determine USEFUL features - i.e. waypoints useful for VI users" FOLDED="false">
                     <edge COLOR="#eed864" />
                     <font NAME="Helvetica" SIZE="10" />
@@ -115,7 +123,7 @@
                     <font NAME="Helvetica" SIZE="10" />
                 </node>
             </node>
-            <node TEXT="Headings of 2D images compared with headings of OSM routes - maybe?" FOLDED="false">
+            <node TEXT="Headings of 2D images compared with headings of OSM routes - to find correct features in the path of the user. But the features will already be in the database - might be more useful for the RGB-D learning step. But will introduce a lot of (possible quite useful) redundancy due to each feature being captured multiple times" FOLDED="false">
                 <edge COLOR="#ecd862" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
