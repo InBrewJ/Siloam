@@ -10,6 +10,10 @@
                 <edge COLOR="#efa776" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
+            <node TEXT="OpenSURF" FOLDED="false">
+                <edge COLOR="#efa26c" />
+                <font NAME="Helvetica" SIZE="10" />
+            </node>
             <node TEXT="Like &quot;Beme&quot; - hold any reasonable smartphone to the user's chest and infer an obstacle" FOLDED="false">
                 <edge COLOR="#eea16b" />
                 <font NAME="Helvetica" SIZE="10" />
@@ -37,6 +41,14 @@
             <node TEXT="Needs applet developing to take photospheres with depth information" FOLDED="false">
                 <edge COLOR="#84ace7" />
                 <font NAME="Helvetica" SIZE="10" />
+                <node TEXT="The photosphere feature should be open source - have a look at: https://android.googlesource.com/platform/packages/apps/Camera/+refs" FOLDED="false">
+                    <edge COLOR="#86afe6" />
+                    <font NAME="Helvetica" SIZE="10" />
+                </node>
+                <node TEXT="Version of Android (that can probably be updated) on the P2P is 6.0.1 - Marshmallow" FOLDED="false">
+                    <edge COLOR="#8eb4e9" />
+                    <font NAME="Helvetica" SIZE="10" />
+                </node>
             </node>
             <node TEXT="Needs kerb heights measured" FOLDED="false">
                 <edge COLOR="#81aae8" />
@@ -108,9 +120,5 @@
                 <font NAME="Helvetica" SIZE="10" />
             </node>
         </node>
-    </node>
-    <node TEXT="" FOLDED="false">
-        <edge COLOR="#b4b4b4" />
-        <font NAME="Helvetica" SIZE="10" />
     </node>
 </map>
