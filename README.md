@@ -1,1 +1,1 @@
-Siloam, Tango Powered Exploration
+Siloam, Tango powered exploration for the visually impaired
