@@ -18,6 +18,10 @@
                 <edge COLOR="#64d6c1" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
+            <node TEXT="How much space is there for deviation from the original design document?" FOLDED="false">
+                <edge COLOR="#6ddac6" />
+                <font NAME="Helvetica" SIZE="10" />
+            </node>
         </node>
         <node TEXT="New Obstacles" FOLDED="false" POSITION="left">
             <edge COLOR="#efa670" />
@@ -118,6 +122,10 @@
                     <edge COLOR="#9ace62" />
                     <font NAME="Helvetica" SIZE="10" />
                 </node>
+                <node TEXT="Or photogrammetry from 360 images taken with the tango device" FOLDED="false">
+                    <edge COLOR="#a1d36b" />
+                    <font NAME="Helvetica" SIZE="10" />
+                </node>
             </node>
             <node TEXT="Relative positions of features stored in something like a PostGIS database" FOLDED="false">
                 <edge COLOR="#a3d86e" />
@@ -144,6 +152,10 @@
                     <node TEXT="Explore entire campus" FOLDED="false">
                         <edge COLOR="#ead155" />
                         <font NAME="Helvetica" SIZE="10" />
+                        <node TEXT="Load entire area of geocoded features" FOLDED="false">
+                            <edge COLOR="#ead161" />
+                            <font NAME="Helvetica" SIZE="10" />
+                        </node>
                         <node TEXT="Highlight key waypoints" FOLDED="false">
                             <edge COLOR="#ecd15b" />
                             <font NAME="Helvetica" SIZE="10" />
