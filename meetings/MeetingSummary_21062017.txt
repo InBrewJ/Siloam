@@ -62,3 +62,5 @@ Next Tasks:
 
 -> Provisional slides should also be handed in at the same time as the second draft. Vitaliy unveiled
    the 8x8 rule: 8 lines x 8 words per slide. And try to include pictures!
+
+-> Provisional presentation date (for both presentations): 06/07/2017
