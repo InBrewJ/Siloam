@@ -45,6 +45,10 @@ Tasks Carried Over From Previous Meeting:
    on draw.io (both of which are included in the github - diagrams in XML for and mindmap in .mm
    format for the coggle) was completed.
 
+-> On review of some database technologies it seems that there is a version of CouchDB called
+   GeoCouch which may offer the features we need and that stores documents in JSON format. Further
+   research is being carried out.
+
 Next Tasks:
 
 -> Come up with an estimate of storage space needed for the 3D model classification.
