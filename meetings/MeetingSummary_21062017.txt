@@ -1,0 +1,60 @@
+MSc Project - Geospatial Database Meeting
+Room 221 Ashton: Vitaliy, Jason
+Somewhere in the land of Mexico: Sandra (via Skype)
+Away at conference: Neil
+21/06/2017
+
+Key Points:
+
+-> Jason and Sandra covered the high level design elements of Tango data collection (SiloamEyes),
+   data organisation (SiloamStore), route mapping (SiloamPaths) and RGB-D machine learning
+   (SiloamLearn). Not covered was the function of new obstacle detection (SiloamShift). It was
+   decided that this would be a feature that would be included if time permits, especially after
+   Vitaliy's mantra of "Focus on something basic".
+
+-> Highlighted in Sandra's analysis was the two methods of path finding that OSM uses, Mapzen and
+   Graphhopper. These two technologies seem to be implemented in Java. Integration will need to be
+   planned. Since the project is leaning towards a final (probably future) application that would
+   allow VI users to explore a given area, useful waypoints like e.g. coffee shops, trees should
+   all be included a given bounding box of exploration. Also mentioned was mixing in live weather
+   data with the maps. Again, this is probably a stretch goal.
+
+-> The high level coggle mindmap as well as the draw.io architectural diagrams should be included
+   in the design specification.
+
+-> For the 3D object classification, it could be the case that with certain methods a lot of
+   storage space might be required to house certain 3D models from a variety of different viewing
+   angles. For the upcoming specification and proposed design, the 3D object classification section
+   will probably take the form of a literature review and then a conclusion section where one method
+   will be chosen over the others. Sandra and Jason could each take a selection of different papers
+   and evaluate them in their specifications. From the two winning methods from each spec, a winner
+   could be chosen by both parties.
+
+Tasks Carried Over From Previous Meeting:
+
+-> Photospheres take ~24 hours to be uploaded and made available to any Street View user and
+   therefore available to the Street View web API. However, after some consideration, since Tango
+   enabled devices are being used for the 3D modelling of features, Streetview data will not be
+   necessary to populate the database. However, since the photospheres are to be captured anyway,
+   if there are any problems with the data collections using a Tango device, the uploaded
+   photospheres could still be used for a photogrammetry-type method of feature extraction using
+   OpenSURF or something similar, by way of a "plan B". The uploaded photospheres will also help
+   with the Street View in general, not an unhappy consequence. 
+
+-> High level project plan in the form of a public coggle mindmap and several diagrams composed
+   on draw.io (both of which are included in the github - diagrams in XML for and mindmap in .mm
+   format for the coggle) was completed.
+
+Next Tasks:
+
+-> Come up with an estimate of storage space needed for the 3D model classification.
+
+-> First draft of specification and design to be handed in by the weekend. Vitaliy will be available
+   via email next week whilst at a conference, but not immediately.
+
+-> Neil, are you free at any point next week for a meeting at the Hartree centre?
+
+-> To that end, second draft of the spec and design to be handed in before the meeting with Neil.
+
+-> Provisional slides should also be handed in at the same time as the second draft. Vitaliy unveiled
+   the 8x8 rule: 8 lines x 8 words per slide. And try to include pictures!
