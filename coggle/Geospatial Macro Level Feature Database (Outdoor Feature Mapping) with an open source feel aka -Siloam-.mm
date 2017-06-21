@@ -6,6 +6,10 @@
         <node TEXT="RGB-D Machine Learning" FOLDED="false" POSITION="right">
             <edge COLOR="#67d7c4" />
             <font NAME="Helvetica" SIZE="10" />
+            <node TEXT="See &quot;3D SURF&quot; for another method" FOLDED="false">
+                <edge COLOR="#68dac5" />
+                <font NAME="Helvetica" SIZE="10" />
+            </node>
             <node TEXT="See &quot;Sliding Shapes for 3D Object Detection in Depth Images&quot; (do a google scholar search)" FOLDED="false">
                 <edge COLOR="#5cd6bf" />
                 <font NAME="Helvetica" SIZE="10" />
@@ -78,7 +82,7 @@
                 <edge COLOR="#83abe8" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
-            <node TEXT="Texture information is also important? Pretty sure Neil mentioned this" FOLDED="false">
+            <node TEXT="Texture information is also important? Pretty sure Neil mentioned this. Can be gleaned from RGB data" FOLDED="false">
                 <edge COLOR="#7aa6e7" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>
@@ -106,12 +110,16 @@
             <node TEXT="Upload 360 photospheres to Street View" FOLDED="false">
                 <edge COLOR="#9bd264" />
                 <font NAME="Helvetica" SIZE="10" />
+                <node TEXT="Helps with the mapping effort" FOLDED="false">
+                    <edge COLOR="#a0d369" />
+                    <font NAME="Helvetica" SIZE="10" />
+                </node>
                 <node TEXT="Uploads take ~1 day (further testing will commence)" FOLDED="false">
                     <edge COLOR="#9cd064" />
                     <font NAME="Helvetica" SIZE="10" />
                 </node>
             </node>
-            <node TEXT="2D images downloaded back from StreetView [Point of re-download](#035691)" FOLDED="false">
+            <node TEXT="2D images downloaded back from StreetView. Also see https://stackoverflow.com/questions/29916149/google-maps-streetview-how-to-get-panorama-id [Point of re-download](#035691)" FOLDED="false">
                 <edge COLOR="#a4d870" />
                 <font NAME="Helvetica" SIZE="10" />
             </node>

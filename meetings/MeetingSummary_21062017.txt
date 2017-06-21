@@ -23,7 +23,7 @@ Key Points:
    in the design specification.
 
 -> For the 3D object classification, it could be the case that with certain methods a lot of
-   storage space might be required to house certain 3D models from a variety of different viewing
+s   storage space might be required to house certain 3D models from a variety of different viewing
    angles. For the upcoming specification and proposed design, the 3D object classification section
    will probably take the form of a literature review and then a conclusion section where one method
    will be chosen over the others. Sandra and Jason could each take a selection of different papers
