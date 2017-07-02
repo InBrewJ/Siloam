@@ -1,0 +1,53 @@
+MSc Project - Geospatial Database Meeting
+Skype Meeting Between Neil and Jason
+Vitaliy was away at a conference
+After much effort, a connection could not be formed with Sandra in
+Mexico
+28/06/2017
+
+Key Points:
+
+-> Need another meeting next week to go over Sandy's design and work
+   out an integration plan
+
+-> Proposed CouchDB/geocouch system was covered. The experimental work
+   of Volker Mische, engineer at Couchbase for spatial polygon queries
+   but in general it may be difficult and unweildy to put on the
+   university servers to be accessed by SiloamRoute. Added to this,
+   being experimental, support is not readily available which could
+   slow down progress of the project. It may be better to simply
+   install Couchbase, for which many binaries are available for a
+   variety of systems. Whilst only allowing spatial bounding box
+   queries, it may be adequate for a proof of concept.
+
+-> The project should focus on a subset of categories, again to speed
+   up development of the final product which should be thought of as a
+   proof of concept. Kerb heights data needs to be included somewhere
+   though.
+
+-> Would be very useful if we could prove that door-to-door navigation
+   is feasible by including doorways in the macro level features that
+   are classfied.
+
+
+Tasks Carried Over From Previous Meeting:
+
+-> An estimate 50GB will be needed for the various RGB and depth images
+   to train the propsed SVM in Jason's design specification. A very
+   rough estimate of 70GB will be needed to store all of the 3D models
+   used in conjuction with RGB-D data to train the same SVM. The
+   couchDB/geocouch implementation shouldn't take up more than 100MB
+   of webspace.
+
+-> Jason specification and proposed design handed along with presentation
+   slides that will be added to over the week before presentations on
+   06/07/2017.
+
+-> Presentations are to take place on 06/07/2017 between 10:00 and 12:00
+   Neil might be able to make this.
+
+
+Next Tasks:
+
+-> Begin development!
+

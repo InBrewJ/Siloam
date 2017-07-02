@@ -46,7 +46,6 @@
 			children = (
 				2A8959E11F0353A100736927 /* libcpprest.2.9.dylib */,
 				2A7470091F034308000650C0 /* cpprestsdkTest */,
-				2A7470081F034308000650C0 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,12 +55,14 @@
 				2A7470071F034308000650C0 /* cpprestsdkTest */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		2A7470091F034308000650C0 /* cpprestsdkTest */ = {
 			isa = PBXGroup;
 			children = (
 				2A74700A1F034308000650C0 /* main.cpp */,
+				2A7470081F034308000650C0 /* Products */,
 			);
 			path = cpprestsdkTest;
 			sourceTree = "<group>";
