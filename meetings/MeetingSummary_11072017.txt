@@ -1,0 +1,51 @@
+MSc Project - Geospatial Database Meeting
+Costa, STFC Daresbury
+Neil, Sandra (arrived slightly late - no drama) and Jason
+Vitaliy - away at conference
+11/07/2017
+
+Key Points:
+
+-> Before Sandra arrived, Neil and Jason discussed the possibility of getting some
+   compute time on one of STFC's GPU clusters to explore the possibility of
+   using DCNN's (deep convoulational 3-D neural networks) to learn the labels
+   of the macro level features in each RGB-D photosphere/3D map captured during the
+   data collection phase. Neil to have a chat with Roger Downing. Princeton's
+   "Marvin" framework is under consideration.
+
+-> After Neil's contact with Lenovo, the possibility of getting a loan Phab 2 Pro is
+   very likely. Neil has sent Jason's report to Lenovo as a way of filling them in on
+   the benefits of the project to the company itself. There is some concern
+   about when the handset will actually reach us. Shipping direct may be a quicker
+   option? Shipping costs can be covered as a reasonable expense.
+
+-> When Sandra arrived she went through her specification/proposed design with Neil -
+   she will focus on the SiloamRoute subsystem for now. Various open source projects
+   have been identified that can help with this like OSRM (route mapping engine) and
+   Xerces (C++ XML parser). The final output will probably be on a terminal for this
+   iteration of the project, perhaps using a readily available text-to-speech package.
+   This could be Flite? http://www.speech.cs.cmu.edu/flite/index.html - which seems
+   to be very portable indeed. Or something from Nuance (if there are any stripped
+   back, free packages available from them). 
+
+-> Sandra also has also managed to get all relevant data from OSM about the UoL campus
+   by defining a bounding box using the OSM API (v0.6?). Filtering these results to
+   return relevant waypoints of a given route is in development.
+
+-> There was a discussion about 3D model classification as researched by Sandra as opposed
+   to RGD-D image classification as proposed in Jason's specification. This will
+   be a topic of discussion in the next meeting. It could be the case that Jason and Sandy
+   will each tackle each proposed machine learning technique and evaluate their performance.
+
+-> Neil will also give some feedback on feasibility of each aspect of the project and
+   some idea on how to focus the work.
+
+Tasks Carried Over From Previous Meeting:
+
+-> Development has begun! 
+
+Next tasks:
+
+-> Set up weekly meetings - next meeting is currently set for 21/07/2017 in Liverpool.
+
+-> Carry on with development! Tasks on Asana.
