@@ -8,30 +8,27 @@
 # It's advisable to save a startup file with a blank scene
 # (i.e. with the cube and lamp deleted) before running this script
 #
-#
 
 import bpy   # for all blender functionality
 import os    # for os file handling
 import math
+from shutil import copyfile
 
-# Do a test import of the seventh(?) SiloamSee OBJ/MTL model
-
-# Set up some camera variables
+# Set up some globals
 
 fov = 90.0
+objName = "map.obj"
 
 def clearScene():
     for object in bpy.data.objects:
-        print(object.name + " is at location: " + str(object.location) + " at present")
+        #print(object.name + " is at location: " + str(object.location) + " at present")
         bpy.data.objects[object.name].select = True
         bpy.ops.object.delete()
         
 def toRad(angle):
     return angle*(math.pi/180.0)
 
-# run() function - to be called from the python console window
-
-def run(folder):
+def render(objPath, folder):
     
     # Print the locations of the objects in the opening scene
     # (should just be the cube, the light and the camera),
@@ -44,8 +41,7 @@ def run(folder):
     
     context = bpy.context
     
-    modelPath = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/" + folder
-    siloamSeeMaps = ["map.obj"]
+    modelPath = objPath + folder
     
     # Create a scene
     scene = bpy.data.scenes.new("Scene")
@@ -97,23 +93,52 @@ def run(folder):
     # the following actually creates another scene and links the imported
     # object to it
     
-    for model_path in siloamSeeMaps:
-        scene.camera = camera
-        path = os.path.join(modelPath, model_path)
-        # make a new scene with cam and lights linked
-        context.screen.scene = scene
-        bpy.ops.scene.new(type='LINK_OBJECTS')
-        context.scene.name = model_path
-        cams = [c for c in context.scene.objects if c.type == 'CAMERA']
-        #import model
-        bpy.ops.import_scene.obj(filepath=path, axis_forward='-Z', axis_up='Y', filter_glob="*.obj;*.mtl")
+    scene.camera = camera
+    path = os.path.join(modelPath, "map.obj")
+    # make a new scene with cam and lights linked
+    context.screen.scene = scene
+    bpy.ops.scene.new(type='LINK_OBJECTS')
+    context.scene.name = "map.obj"
+    cams = [c for c in context.scene.objects if c.type == 'CAMERA']
+    # import model
+    bpy.ops.import_scene.obj(filepath=path, axis_forward='-Z', axis_up='Y', filter_glob="*.obj;*.mtl")
+    
+    bpy.data.scenes[objName].render.resolution_x = 400
+    bpy.data.scenes[objName].render.resolution_y = 400
+    bpy.data.scenes[objName].render.resolution_percentage = 100
+    
+    for c in cams:
+        context.scene.camera = c                                    
+        print("Render ", objName, context.scene.name, c.name)
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders", folder, c.name])
+        bpy.ops.render.render(write_still=True)
         
-        bpy.data.scenes[model_path].render.resolution_x = 400
-        bpy.data.scenes[model_path].render.resolution_y = 400
-        bpy.data.scenes[model_path].render.resolution_percentage = 100
-        
-        for c in cams:
-            context.scene.camera = c                                    
-            print("Render ", model_path, context.scene.name, c.name)
-            bpy.data.scenes[model_path].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders", folder, c.name])
-            bpy.ops.render.render(write_still=True)
+    # copy the .dat file from the obj folder into the render folder
+    print("Copying dat file...")
+    copyfile(os.path.join(modelPath, "gpsAndHeading.dat"), os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders", folder, "gpsAndHeading.dat"]))
+            
+# run() function - to be called from the python console window
+
+# My path for the OBJs from SiloamSee
+# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/"
+
+def run(objPath):
+    
+    # find all the sub folders within objPath and then render all the images
+    subdirs = [x[0] for x in os.walk(objPath)]
+    
+    # the first in the list is the directory itself, so we take all
+    # apart from the first, split by "/" and just take the end of
+    # this list and pass it to our render function
+    
+    folders = []
+    
+    for subdir in subdirs[1:]:
+        folders.append(subdir.split("/")[-1])
+    
+    print("Rendering...")
+    
+    for folder in folders:
+        render(objPath, folder)
+    
+    print("Done")
