@@ -1,0 +1,37 @@
+All present + Roger Downing
+Costa, STFC Daresbury
+
+-> USE SLACK! Neil has the first slack post...
+
+-> Use Slack for the agile sprint things...
+
+-> Shipping will be around £180 for the loan P2P - Neil has spoken to Robin and is
+   willing to pay half - will liverpool pay the other half? Vitaliy will get back
+   to Neil after some deliberation. An STFC courier must be used, hence the horrendous
+   cost
+
+-> How to correct for GPS innacuracy - corroborate the poor GPS accuracy with LIDAR data
+   of say the corner of buildings. The drift from the lidar is random - but it could
+   be used to improve the accuracy of inherently bad GPS data.
+
+-> Went over the progress of the past 4 weeks for Roger's benefit (to see what has been
+   accomplished since the project proposal was written)
+
+-> Crossing points (on roads) would be key for the future
+
+-> Maybe investigate scikit learn with python - but it probably uses LIBSVM under the hood
+
+-> Do get somewhere with the SVM
+
+Next tasks:
+
+-> Extract all waypoints from OSM (Sandy)
+
+-> See next three tasks on Asana (RGB-D Classification)
+
+Next meeting:
+
+-> Vitaliy will be in his office on Tuesday from 11:00 and maybe on Thursday/Friday
+
+-> Generally the meeting will be in Liverpool next week - Neil will send a meeting
+   invitation
