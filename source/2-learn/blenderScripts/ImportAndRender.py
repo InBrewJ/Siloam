@@ -1,9 +1,8 @@
 #
-# testImport.py
+# ImportAndRender.py
 # 
-# Steps 1 and 2 of the Blender workflow - import a spheremap, rotate it 
-# correctly (or at least set up the axis correctly), add lights
-# and switch to texture mode
+# Currently steps 1 and 2 of the Blender workflow - import a spheremap, rotate it 
+# and add lights
 #
 # It's advisable to save a startup file with a blank scene
 # (i.e. with the cube and lamp deleted) before running this script
@@ -17,11 +16,11 @@ from shutil import copyfile
 # Set up some globals
 
 fov = 90.0
-objName = "map.obj"
+objName = "map.obj" # the name SiloamSee gives to every exported obj
 
 def clearScene():
     for object in bpy.data.objects:
-        #print(object.name + " is at location: " + str(object.location) + " at present")
+        # print(object.name + " is at location: " + str(object.location) + " at present")
         bpy.data.objects[object.name].select = True
         bpy.ops.object.delete()
         
