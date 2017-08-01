@@ -27,25 +27,7 @@ def clearScene():
 def toRad(angle):
     return angle*(math.pi/180.0)
 
-def render(objPath, folder):
-    
-    # Print the locations of the objects in the opening scene
-    # (should just be the cube, the light and the camera),
-    # select them and then delete them to start with a blank canvas
-    
-    # just to be safe (and for dev purposes)
-    clearScene()
-        
-    # Import a sample object (the full-ish bus stop spheremap)
-    
-    context = bpy.context
-    
-    modelPath = objPath + folder
-    
-    # Create a scene
-    scene = bpy.data.scenes.new("Scene")
-    
-    # Create the cameras
+def createCameras(scene):
     for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
         
         # Create the forwards facing cameras
@@ -69,7 +51,29 @@ def render(objPath, folder):
         camera.data.angle = toRad(fov)
     
         scene.objects.link(camera)
+    
+
+def render(objPath, folder):
+    
+    # Print the locations of the objects in the opening scene
+    # (should just be the cube, the light and the camera),
+    # select them and then delete them to start with a blank canvas
+    
+    # just to be safe (and for dev purposes)
+    clearScene()
         
+    # Import a sample object (the full-ish bus stop spheremap)
+    
+    context = bpy.context
+    
+    modelPath = objPath + folder
+    
+    # Create a scene
+    scene = bpy.data.scenes.new("Scene")
+    
+    # Create the cameras
+    
+    createCameras(scene)
         
     # Create an omidirectional point light without specular light to 
     # illuminate the textures as they were captured   
@@ -92,7 +96,7 @@ def render(objPath, folder):
     # the following actually creates another scene and links the imported
     # object to it
     
-    scene.camera = camera
+    #scene.camera = camera
     path = os.path.join(modelPath, "map.obj")
     # make a new scene with cam and lights linked
     context.screen.scene = scene
@@ -122,7 +126,6 @@ def render(objPath, folder):
 # "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/"
 
 def run(objPath):
-    
     # find all the sub folders within objPath and then render all the images
     subdirs = [x[0] for x in os.walk(objPath)]
     
@@ -141,3 +144,6 @@ def run(objPath):
         render(objPath, folder)
     
     print("Done")
+    
+def renderOnce():
+    render("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/", "SiloamSee-170725-203831-train")

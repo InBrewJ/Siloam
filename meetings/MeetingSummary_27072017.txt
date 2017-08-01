@@ -1,9 +1,13 @@
+MSc Project - Geospatial Database Meeting
 All present + Roger Downing
-Costa, STFC Daresbury
+Waterside, STFC Daresbury
+27/07/2017
 
--> USE SLACK! Neil has the first slack post...
+Key Points:
 
--> Use Slack for the agile sprint things...
+-> USE SLACK! Neil has the first slack post. Early bird catches the worm
+
+-> Use Slack for the agile sprint things
 
 -> Shipping will be around £180 for the loan P2P - Neil has spoken to Robin and is
    willing to pay half - will liverpool pay the other half? Vitaliy will get back
@@ -11,17 +15,18 @@ Costa, STFC Daresbury
    cost
 
 -> How to correct for GPS innacuracy - corroborate the poor GPS accuracy with LIDAR data
-   of say the corner of buildings. The drift from the lidar is random - but it could
+   of, say, the corner of buildings. The drift from the lidar is random - but it could
    be used to improve the accuracy of inherently bad GPS data.
 
 -> Went over the progress of the past 4 weeks for Roger's benefit (to see what has been
    accomplished since the project proposal was written)
 
--> Crossing points (on roads) would be key for the future
+-> Road crossing points would be key for the future - maybe replace one of the
+   current things (lamp posts, steps, bus stops, doorways)? - probably most useful
+   to eliminate lamp posts?
 
--> Maybe investigate scikit learn with python - but it probably uses LIBSVM under the hood
-
--> Do get somewhere with the SVM
+-> Maybe investigate scikit learn with python - but it probably uses C/C++ LIBSVM under
+   the hood
 
 Next tasks:
 

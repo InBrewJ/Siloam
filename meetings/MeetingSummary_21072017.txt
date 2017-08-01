@@ -1,0 +1,48 @@
+MSc Project - Geospatial Database Meeting
+Neil, Jason, Vitaliy, Sandra
+Ashton Building, Office 221 
+21/07/2017
+
+Key Points:
+
+-> See feedback from Neil - he has provided annotated word documents with his thoughts
+   on each of the project specifications.
+
+-> It would be an idea to focus on some specific routes to cut down the time needed for
+   mapping. Sandra and I have discussed a route from the Subway on Myrtle street to
+   the Sydney Jones library. It would also be very useful to get feedback from a BoVI
+   student (past or present) to identify particularly tricky routes.
+
+-> Update on Sandra's subsystems: OSRM was putting up too much of a fight so she is now
+   working with the Graphhopper web API and working with the GPX files it produces. This
+   is a far simpler approach and should speed up development markedly. The decision has
+   also been made to use Python to process the route data. Again, this will speed up
+   development compared to a C++ implementation.
+
+-> Graphhopper also returns the GPS points of the centroids of buildings, not of their
+   outer vertices/edges. This will have to be thought about, possibly by using the
+   GPS positions of doorways from the SiloamSee/Learn systems.
+
+-> We can get some help from Ed Pyzer Knapp at IBM for use of the Panther/Paragon machines
+   which it is confirmed we can use for a NN implementation of 3D model classifcation or
+   indeed just a NN implementation of RGB-D classifcation (since so much effort is put in here)
+   
+   See Jason's literature review. Advice and guidance to do with all things machine learning
+   could be sourced from some of Neil's colleagues including Roger Downing.
+
+-> An Agile development process will adopted from now on. Small sprints with regular updates
+   on Slack which can be used to shift development goals to keep only the most crucial
+   elements of the design.
+
+Next Tasks:
+
+-> See if we can find a UoL BoVI student, past or present to identify the most useful routes
+   to map.
+
+-> As ever, carry on with dev!
+
+-> Remember the Agile process!
+
+Next Meeting:
+
+-> 09:30 27/07/2017 at Waterside, STFC
