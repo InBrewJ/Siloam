@@ -1,33 +1,46 @@
 #
 # ImportAndRender.py
 # 
-# Currently steps 1-5 of the Blender workflow - import a spheremap, rotate it 
+# Currently steps 1-7 of the Blender workflow - import a spheremap, rotate it 
 # and add lights, then render RGB-D images
 #
 # It's advisable to save a startup file with a blank scene
 # (i.e. with the cube and lamp deleted) before running this script
 #
+# There's a fair amount of repeated code - yes it needs refactoring, granted
+#
 
-import bpy   # for all blender functionality
-import os    # for os file handling
-import math
-from shutil import copyfile
+import bpy                    # for all blender functionality
+import os                     # for os file handling
+import math                   # literally just for pi
+from shutil import copyfile   
+import numpy                  # to create ranges
+import mathutils              # for sin and cos 
 
 # Set up some globals
 
 fov = 90.0
 objName = "map.obj" # the name SiloamSee gives to every exported obj
+daeCamGroup = []
+daeRenderPath = []
 
 def clearScene():
+    # Just to be pythonic and explicit
+    global daeCamGroup
+    global daeRenderPath
+    
     for object in bpy.data.objects:
         # print(object.name + " is at location: " + str(object.location) + " at present")
         bpy.data.objects[object.name].select = True
         bpy.ops.object.delete()
+    
+    daeCamGroup = []
+    daeRenderPath = []
         
 def toRad(angle):
     return angle*(math.pi/180.0)
 
-def createCameras(scene, context):
+def createSSCameras(scene, context):
     cameraId = 0
     for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
         
@@ -41,7 +54,6 @@ def createCameras(scene, context):
         # Euler angles are in radians NOT degrees
         camera.rotation_euler = (toRad(90), 0.0, toRad(-90 + angle))
         camera.data.angle = toRad(fov)
-        #camera.data.name = "forwards" + str(cameraId)
     
         scene.objects.link(camera)
         
@@ -55,23 +67,17 @@ def createCameras(scene, context):
         # Euler angles are in radians NOT degrees
         camera.rotation_euler = (0.0, 0.0, toRad(-90 + angle))
         camera.data.angle = toRad(fov)
-        camera.data.name = "downwards"  + str(cameraId)
     
         scene.objects.link(camera)
         
         cameraId += 1
     
-
-def render(objPath, folder):
-    
-    # Print the locations of the objects in the opening scene
-    # (should just be the cube, the light and the camera),
-    # select them and then delete them to start with a blank canvas
+def renderSS(objPath, folder):
     
     # just to be safe (and for dev purposes)
     clearScene()
         
-    # Import a sample object (the full-ish bus stop spheremap)
+    # Set the context and the standard model path
     
     context = bpy.context
     
@@ -82,7 +88,7 @@ def render(objPath, folder):
     
     # Create the cameras
     
-    createCameras(scene, context)
+    createSSCameras(scene, context)
         
     # Create an omidirectional point light without specular light to 
     # illuminate the textures as they were captured   
@@ -181,14 +187,15 @@ def render(objPath, folder):
         
 def renderOnce():
     clearScene()
-    render("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/", "SiloamSee-170725-203831-train")
+    renderSS("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/", "SiloamSee-170725-203831-train")
 
-# run() function - to be called from the python console window
+# runSS(objPath) function - to be called from the python console window
 
-# My path for the OBJs from SiloamSee
+# My path for the OBJs from SiloamSee:
 # "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/"
 
-def run(objPath):
+def runSS(objPath):
+    
     # find all the sub folders within objPath and then render all the images
     subdirs = [x[0] for x in os.walk(objPath)]
     
@@ -204,6 +211,171 @@ def run(objPath):
     print("Rendering...")
     
     for folder in folders:
-        render(objPath, folder)
+        renderSS(objPath, folder)
     
     print("Done")
+    
+def createDAECamerasV1(radius, scene, context, daeModel):
+    
+    # We create a cube at the origin for the cameras to focus on
+    # Each of the DAE's is then moved by hand to where the cameras
+    # are focussing. It's possible with some of the DAE's to set 
+    # to origin, but with others it isn't. Workflow error
+
+    # Add a Cube primitive to the empty object.
+    bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 1.5))
+    bpy.data.objects["Cube"].hide = True
+    bpy.data.objects["Cube"].hide_render = True
+    bpy.data.objects["Cube"].name = "CameraAnchor"
+    
+    cameraId = 0
+    # 5 heights: [0.5, 1.0, 1.5, 2.0, 2.5]
+    
+    for z in [0.5, 1.0, 1.5, 2.0, 2.5]:
+        for angle in numpy.arange(0, 360, 15):
+            
+            # set up the lights at the same time, at 12, 3, 6 and 9
+            
+            # Point light creation
+    
+            if z == 1.5 and angle in [0, 90, 180, 270]:
+                lampData = bpy.data.lamps.new(name="Point Light", type='POINT')
+                lampData.use_specular = False
+                lampData.use_diffuse = True
+                lampData.energy = 1.0
+                lamp = bpy.data.objects.new(name="Point Light", object_data=lampData)
+                lamp.location = (radius*math.cos(toRad(angle)), radius*math.sin(toRad(angle)), z)
+                lamp.select = True
+                scene.objects.active = lamp
+                
+                scene.objects.link(lamp) 
+             
+            # name the camera appropriately
+            cameraData = bpy.data.cameras.new("rig" + str(cameraId))
+            camera = bpy.data.objects.new("rig" + str(cameraId), cameraData)
+            
+            # location cameras on the circumference of a circle
+            # at 15 degree intervals using parametric circular equations
+            
+            camera.location = (radius*math.cos(toRad(angle)), radius*math.sin(toRad(angle)), z) 
+           
+            # Make each camera look at the centroid of the "Sketchup" object
+            
+            daeCamGroup.append(bpy.data.objects["rig" + str(cameraId)])
+           
+            o = bpy.data.objects["rig" + str(cameraId)]
+            constraint = o.constraints.new('TRACK_TO')
+            constraint.target = bpy.data.objects["CameraAnchor"]
+            constraint.track_axis = 'TRACK_NEGATIVE_Z'
+            constraint.up_axis = 'UP_Y'
+        
+            scene.objects.link(camera)
+            
+            cameraId += 1
+            
+    scene.update()
+    
+    # make sure we deselect all the lamps
+    
+    for obj in bpy.data.objects:
+        obj.select = False 
+        
+#
+# setupDAEEnv(radius) - to be called from the Python console window
+# The rendering of Trimble models is a slightly more interactive process
+# since the points of origin on the DAE's vary slightly. setupEnvTrimble sets up
+# an array of cameras and lights around the object. It should be followed by
+# importDAE(daePath) and renderDAE() which will output the RGB-D data to a 
+# predefined folder
+#
+    
+def setupDAEEnv(radius):
+    
+    print("Setting up DAE cameras...")
+        
+    # Set the context and the standard model path
+    
+    context = bpy.context
+    
+    if bpy.data.objects.get('SketchUp') is None:
+        print("Please import a dae from SketchUp first...")
+        return
+    else:
+        createDAECameras(radius, bpy.context.screen.scene, context, bpy.data.objects['SketchUp'])
+
+    print("Done")
+    
+# gradCams() - simple function that selects all the cameras so they can be
+# translated as a group
+    
+def grabCams():
+    for cam in daeCamGroup:
+        cam.select = False
+        cam.select = True 
+        
+def renderDAE():
+    global daeRenderPath
+    
+    if daeRenderPath == []:
+        print("Please import your DAE via ImportAndRender.importDAE(<daePath>). If you already have a DAE imported, delete it and start again")
+        return  
+    elif bpy.data.objects.get('SketchUp') is None or bpy.data.objects.get('rig0') is None:
+        print("Please import a dae from SketchUp and then run setupDAEEnv(<float radius>)")
+        return
+    
+    print("Rendering RGB-D from current DAE. This might take a while...")
+    
+    # Scene name should always just be "Scene" - we're not deviating from default
+    sceneName = "Scene"
+    context = bpy.context
+    cams = [c for c in context.scene.objects if c.type == 'CAMERA']
+    
+    for c in cams:
+        context.scene.camera = c
+        bpy.data.scenes[sceneName].render.resolution_x = 400
+        bpy.data.scenes[sceneName].render.resolution_y = 400
+        bpy.data.scenes[sceneName].render.resolution_percentage = 100
+        
+        # render RGB
+        
+        context.scene.render.filepath = os.path.join(daeRenderPath, c.name + "-RGB")
+        bpy.ops.render.render(write_still=True)
+    
+    # TODO: and render the depth image for each camera
+    
+    print("Done")
+        
+    
+# My path for the DAE's from Trimble Warehouse:
+# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE"
+# Test on the fancy door:
+# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/Doors/fancyDoor/model.dae"
+# Test on archdoor:
+# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/Doors/ArchDoor.dae"
+# Don't import via the standard Blender GUI method - it does not set things up correctly for 
+# the output render path for the current DAE, as can be seen below
+
+# Standard render path is: 
+# /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn/
+# plus the name of the DAE file. If the DAE file is just called model.dae, make it the name of the
+# parent directory - e.g. ".../fancyDoor/model.dae" would become "fancyDoor"
+# we change the global "daeRenderPath" here
+
+def importDAE(daePath):
+    global daeRenderPath
+    
+    tempPath = daePath
+    basePath = []
+    
+    tempPath = tempPath.split("/")
+    
+    if tempPath[-1] == "model.dae":
+        # go one up in the directory hierarchy
+        basePath = tempPath[-2]
+    else: 
+        # use the basePath of tempPath (which is daePath)
+        basePath = tempPath[-1].split(".")[0]
+    
+    daeRenderPath = os.path.join("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn/", basePath)
+    
+    bpy.ops.wm.collada_import(filepath=daePath)
