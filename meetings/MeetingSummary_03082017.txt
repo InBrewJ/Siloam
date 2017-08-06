@@ -1,0 +1,50 @@
+MSc Project - Geospatial Database Meeting
+Vitaliy, Jason and Sandra - Ashton Building Room 221
+Neil, via Skype
+03/08/2017
+
+Key Points:
+
+-> Progress from Sandra: functionality of SiloamRoute is nearly there, code just
+   needs refactoring. The current Python program takes the GPS starting point of the
+   proposed route [Subway on Myrtle Street to the Harold Cohen Library - which roughly
+   follows the golden truth route], the end GPS point and prints addresses and post
+   codes of each.
+
+   Uses a 40m (20m either side of the current GPS point) bounding box and scans the
+   route for waypoints. The bounding box is this size to capture the centroids of buildings.
+
+   There are some issues with some of the waypoints - even though there might be e.g. a coffee
+   shop shown on the map in some cases the necessary tags have not been included in OSM.
+   This is because of the inherent open source nature of data editing.
+
+-> Progress from Jason: Set up two types of camera rig in Blender to generate RGB-D
+   images to be used for training/testing the SVM. The first camera rig consists of 8
+   cameras with a 90 degree fov facing forward and 8 cameras facing towards the floor to
+   capture the heading widget. This rig is used to generate RGB-D data from the maps
+   from the SiloamSee app. The second camera rig consists of 120 cameras arranged in a
+   fixed radius circle but offset at different heights to generate RGB-D data from models
+   downloaded from the Trimble 3D warehouse.
+
+-> There will be another Phab 2 Pro available for loan from the morning of Tuesday 8th to
+   Friday 11th to double the mapping effort, since mapping runs areF taking longer
+   than expected.
+
+
+Next tasks:
+
+-> The machine learning effort will be split from here on out - Sandra will focus on a scikit
+   learn implementation of a DCNN (or maybe Marvin?) in Python and Jason will focus on the
+   RBF SVM in C++. But each of us will help the other out. So in a sense the machine learning
+   effort will be separate but also apart. Very Schrodinger.
+
+-> Small details for Sandy - needs the interface to the Couchbase Server to be completed or
+   at least a dummy database created to test the final functionality of SiloamRoute
+
+-> Jason: get at least ten models per each RGB-D category and carry on working on the camera
+   rigs and then the SVM
+
+Next meeting:
+
+-> Provisionally Friday 11th, 15:30
+
