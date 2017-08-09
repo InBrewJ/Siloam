@@ -4,10 +4,15 @@
 # Currently steps 1-7 of the Blender workflow - import a spheremap, rotate it 
 # and add lights, then render RGB-D images
 #
+# Step 8 of the Blender workflow is to try to clean up the meshes with meshlab
+# and see if SVM performance improves. This is probabaly for future work.
+#
 # It's advisable to save a startup file with a blank scene
 # (i.e. with the cube and lamp deleted) before running this script
 #
-# There's a fair amount of repeated code - yes it needs refactoring, granted
+# There's a fair amount of repeated code - yes it needs refactoring, granted.
+# The camera naming is a bit all over the placing when comparing SS and SL
+# too
 #
 
 import bpy                    # for all blender functionality
@@ -21,8 +26,10 @@ import mathutils              # for sin and cos
 
 fov = 90.0
 objName = "map.obj" # the name SiloamSee gives to every exported obj
+sceneName = "Scene"
 daeCamGroup = []
 daeRenderPath = []
+daeCameraDimensions = []
 
 def clearScene():
     # Just to be pythonic and explicit
@@ -41,36 +48,151 @@ def toRad(angle):
     return angle*(math.pi/180.0)
 
 def createSSCameras(scene, context):
-    cameraId = 0
+    ffcameraId = 0
+    dfcameraId = 0
     for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
         
-        # Create the forwards facing cameras
+        # Create the forwards facing cameras (two pillars)
         
-        # name the camera appropriately
+        for z in [-1.0, -0.6]:
+            # name the camera appropriately
+            
+            cameraData = bpy.data.cameras.new("forwards" + str(ffcameraId))
+            camera = bpy.data.objects.new("forwards" + str(ffcameraId), cameraData)
+            camera.location = (-0.2, 0.0, z)
+            # Euler angles are in radians NOT degrees
+            camera.rotation_euler = (toRad(90), 0.0, toRad(-90 + angle))
+            camera.data.angle = toRad(fov)
         
-        cameraData = bpy.data.cameras.new("forwards" + str(cameraId))
-        camera = bpy.data.objects.new("forwards" + str(cameraId), cameraData)
-        camera.location = (-0.2, 0.0, -0.6)
-        # Euler angles are in radians NOT degrees
-        camera.rotation_euler = (toRad(90), 0.0, toRad(-90 + angle))
-        camera.data.angle = toRad(fov)
-    
-        scene.objects.link(camera)
+            scene.objects.link(camera)
+            
+            ffcameraId += 1
         
         # create the downwards facing cameras to view the heading widget
 
         # name the camera appropriately
         
-        cameraData = bpy.data.cameras.new("downwards"  + str(cameraId))
-        camera = bpy.data.objects.new("downwards"  + str(cameraId), cameraData)
-        camera.location = (-0.2, 0.0, -0.6)
+        cameraData = bpy.data.cameras.new("downwards"  + str(dfcameraId))
+        camera = bpy.data.objects.new("downwards"  + str(dfcameraId), cameraData)
+        camera.location = (-0.2, 0.0, -1.0)
         # Euler angles are in radians NOT degrees
         camera.rotation_euler = (0.0, 0.0, toRad(-90 + angle))
         camera.data.angle = toRad(fov)
     
         scene.objects.link(camera)
         
-        cameraId += 1
+        dfcameraId += 1
+        
+# For the V2 dae camera rig : near = daeCameraDimensions[0] (x) (length)
+#                           : far  = daeCameraDimensions[1] (y) (width)
+        
+def renderDepthMap(c, mode, folder, near, far):
+    global daeCameraDimensions
+    
+    # switch on nodes and get reference
+    bpy.context.scene.use_nodes = True
+    tree = bpy.context.scene.node_tree
+    
+    #print("Removing default nodes")
+    
+    # clear default nodes
+    for node in tree.nodes:
+        tree.nodes.remove(node)
+        
+    # Create the render layers, map range and composite nodes
+        
+    RLNode = tree.nodes.new(type='CompositorNodeRLayers')
+    RLNode.location = 0,0
+    
+    MRNode = tree.nodes.new(type='CompositorNodeMapRange')
+    MRNode.location = 210,-100
+    
+    dimX = near
+    dimY = far
+    currentX = c.location[0]
+    currentY = c.location[1]
+    
+    # set the distance thresholds
+    if mode == "SS":
+        MRNode.inputs[1].default_value = near
+        MRNode.inputs[2].default_value = far
+    elif mode == "SL":
+        
+        currentX = c.location[0]
+        currentY = c.location[1]
+        
+        #dimX = daeCameraDimensions[0]
+        #dimY = daeCameraDimensions[1]
+        # "near" is the length of the box and "far" is the width...
+        dimX = near
+        dimY = far
+        
+        # This is a very explicit way to do it - there is of course
+        # a more compact way, like the one found in createDAECamerasV2
+        # but this allows greater tuning of the near/far variables
+        
+        # for near 0.3 is an experimental factor for now...
+        
+        # Corners first
+        if (currentX == 0 and currentY == 0) or \
+           (currentX == 0 and currentY == dimY-1) or \
+           (currentX == dimX-1 and currentY == 0) or \
+           (currentX == dimX-1 and currentY == dimY-1):
+            MRNode.inputs[1].default_value = 0.3
+            # + 0.2 is an experimental factor
+            MRNode.inputs[2].default_value = math.sqrt((dimX**2.0) + (dimY**2.0)) + 0.5
+            
+        elif (currentY == 0 and (currentX > 0 and currentX < dimX-1)) or \
+             (currentY == dimY-1 and (currentX > 0 and currentX < dimX-1)):
+            # Bottom and top edges
+            MRNode.inputs[1].default_value = 0.3
+            MRNode.inputs[2].default_value = float(dimY)/2.0 + 1.0
+            
+        elif ((currentX == 0 or currentX == dimX-1) and (currentY > 0 and currentY < dimY)):
+            # Side edges   
+            MRNode.inputs[1].default_value = 0.3
+            MRNode.inputs[2].default_value = float(dimX)
+    else:
+        print("Mode must be [SS or SL], try again!")
+            
+    # debugging
+    if c.name == "rig509":
+        print("dimX: " + str(dimX))
+        print("dimY: " + str(dimY))
+        print("currentX: " + str(currentX))
+        print("currentY: " + str(currentY))
+        print("Location of 509: " + str(c.location))
+        print("Near for " + str(c.name) + ": " + str(MRNode.inputs[1].default_value))
+        print("Far for " + str(c.name) + ": " + str(MRNode.inputs[2].default_value))
+            
+    # Black is far, white is near  
+    MRNode.inputs[3].default_value = 1.000
+    MRNode.inputs[4].default_value = 0.000
+    
+    CNode = tree.nodes.new(type='CompositorNodeComposite')
+    CNode.location = 400,0
+    
+    # link the nodes
+    
+    links = tree.links
+    link = links.new(RLNode.outputs[2], MRNode.inputs[0])
+    link = links.new(MRNode.outputs[0], CNode.inputs[0])
+    
+    # render the depth image
+    if mode == "SS":
+        # For SiloamSee renders
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name + "-D"])
+    elif mode == "SL":
+        # For SiloamLearn (trimble model) renders
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name + "-D"])
+        
+    bpy.ops.render.render(write_still=True)
+        
+    # clear nodes again and disable nodes
+    for node in tree.nodes:
+        tree.nodes.remove(node)
+     
+    bpy.context.scene.use_nodes = False    
     
 def renderSS(objPath, folder):
     
@@ -135,51 +257,7 @@ def renderSS(objPath, folder):
         
         if "forwards" in c.name:
             print("Generating depth map for: " + c.name)
-            # switch on nodes and get reference
-            bpy.context.scene.use_nodes = True
-            tree = context.scene.node_tree
-            
-            print("Removing default nodes")
-            
-            # clear default nodes
-            for node in tree.nodes:
-                tree.nodes.remove(node)
-                
-            # Create the render layers, map range and composite nodes
-                
-            RLNode = tree.nodes.new(type='CompositorNodeRLayers')
-            RLNode.location = 0,0
-            
-            MRNode = tree.nodes.new(type='CompositorNodeMapRange')
-            MRNode.location = 210,-100
-            
-            # set the distance thresholds
-            
-            MRNode.inputs[1].default_value = 0.720
-            MRNode.inputs[2].default_value = 2.750
-            MRNode.inputs[3].default_value = 1.000
-            MRNode.inputs[4].default_value = 0.000
-            
-            CNode = tree.nodes.new(type='CompositorNodeComposite')
-            CNode.location = 400,0
-            
-            # link the nodes
-            
-            links = tree.links
-            link = links.new(RLNode.outputs[2], MRNode.inputs[0])
-            link = links.new(MRNode.outputs[0], CNode.inputs[0])
-            
-            # render the depth image
-            
-            bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name + "-D"])
-            bpy.ops.render.render(write_still=True)
-                
-            # clear nodes again and disable nodes
-            for node in tree.nodes:
-                tree.nodes.remove(node)
-             
-            bpy.context.scene.use_nodes = False    
-            
+            renderDepthMap(c, "SS", folder, 0.720, 2.750)
              
     # copy the .dat file from the obj folder into the render folder
     print("Copying dat file...")
@@ -253,6 +331,7 @@ def createDAECamerasV1(radius, scene, context, daeModel):
             # name the camera appropriately
             cameraData = bpy.data.cameras.new("rig" + str(cameraId))
             camera = bpy.data.objects.new("rig" + str(cameraId), cameraData)
+            camera.data.angle = toRad(fov)
             
             # location cameras on the circumference of a circle
             # at 15 degree intervals using parametric circular equations
@@ -278,10 +357,84 @@ def createDAECamerasV1(radius, scene, context, daeModel):
     # make sure we deselect all the lamps
     
     for obj in bpy.data.objects:
-        obj.select = False 
+        obj.select = False
         
+# createDAECamerasV2(x, y, scene, context, daeModel)
 #
-# setupDAEEnv(radius) - to be called from the Python console window
+# Creates pillars of cameras in a rectangle (or, of course, square)
+# around a given object. Grab em and delete em if the spacing looks wrong,
+# but the cameras should be fairly close to the subject from trimble
+#
+# For lack of a better method it also creates a point light at the centre
+# of every camera rig. It's probably overkill but at least it's even
+#
+# Also be sure to clean up the trimble model before rendering!
+        
+def createDAECamerasV2(x, y, scene, context, daeModel):    
+    coords = []
+    global daeCameraDimensions
+    
+    daeCameraDimensions = [x, y]
+    
+    print(daeCameraDimensions)
+    
+    # creates the coordinates where each camera pillar will be drawn
+    for loopY in range(y):
+        for loopX in range(x):
+              
+            # Add the top side
+            if loopY == y-1:
+                coords.append((loopX,loopY))
+                
+            # Add the bottom side
+            if loopY == 0:
+                coords.append((loopX,loopY))
+                
+             # Add middles
+            if loopY > 0 and loopY < y-1:
+                if loopX == 0 or loopX == x-1:
+                    coords.append((loopX,loopY))   
+    
+    cameraId = 0
+    for camX,camY in coords:
+        for camZ in [0.0, 0.4, 0.8, 1.2]: 
+            for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
+                
+                # name the camera appropriately
+                
+                cameraData = bpy.data.cameras.new("rig" + str(cameraId))
+                camera = bpy.data.objects.new("rig" + str(cameraId), cameraData)
+                camera.location = (camX, camY, camZ)
+                # Euler angles are in radians NOT degrees
+                camera.rotation_euler = (toRad(90), 0.0, toRad(-90 + angle))
+                camera.data.angle = toRad(fov)
+            
+                scene.objects.link(camera)
+                
+                daeCamGroup.append(bpy.data.objects["rig" + str(cameraId)])
+                
+                cameraId += 1
+                
+                if camZ == 0.8 and angle == 90:
+                    lampData = bpy.data.lamps.new(name="Point Light", type='POINT')
+                    lampData.use_specular = False
+                    lampData.use_diffuse = True
+                    lampData.energy = 0.2
+                    lamp = bpy.data.objects.new(name="Point Light", object_data=lampData)
+                    lamp.location = (camX, camY, camZ)
+                    lamp.select = True
+                    scene.objects.active = lamp
+                    scene.objects.link(lamp)
+            
+    scene.update()
+    
+    # make sure we deselect all the lamps (and everything else for that matter)
+    
+    for obj in bpy.data.objects:
+        obj.select = False 
+                
+#
+# setupDAEEnv(version, radius, x, y) - to be called from the Python console window
 # The rendering of Trimble models is a slightly more interactive process
 # since the points of origin on the DAE's vary slightly. setupEnvTrimble sets up
 # an array of cameras and lights around the object. It should be followed by
@@ -289,7 +442,9 @@ def createDAECamerasV1(radius, scene, context, daeModel):
 # predefined folder
 #
     
-def setupDAEEnv(radius):
+def setupDAEEnv(version, radius, x, y):
+    
+    global daeCameraDimensions
     
     print("Setting up DAE cameras...")
         
@@ -301,7 +456,13 @@ def setupDAEEnv(radius):
         print("Please import a dae from SketchUp first...")
         return
     else:
-        createDAECameras(radius, bpy.context.screen.scene, context, bpy.data.objects['SketchUp'])
+        if version is "V1":
+            createDAECamerasV1(radius, bpy.context.screen.scene, context, bpy.data.objects['SketchUp'])
+        elif version is "V2":
+            createDAECamerasV2(x, y, bpy.context.screen.scene, context, bpy.data.objects['SketchUp'])
+            
+        else:
+            print("Version must be [V1 or V2]")
 
     print("Done")
     
@@ -311,16 +472,28 @@ def setupDAEEnv(radius):
 def grabCams():
     for cam in daeCamGroup:
         cam.select = False
-        cam.select = True 
+        cam.select = True
         
-def renderDAE():
+# IMPORTANT
+# MOVE THE DAE INTO THE CAMERAS NOT THE CAMERAS AROUND THE DAE
+# Doing this incorrectly will mess up the depth map rendering 
+        
+def grabSketchUp():
+    scene = bpy.context.scene
+    for ob in scene.objects:
+        if ob.name.startswith("SketchUp"):
+            ob.select = False
+            ob.select = True
+        
+def renderSL():
     global daeRenderPath
+    global daeCameraDimensions
     
     if daeRenderPath == []:
         print("Please import your DAE via ImportAndRender.importDAE(<daePath>). If you already have a DAE imported, delete it and start again")
         return  
     elif bpy.data.objects.get('SketchUp') is None or bpy.data.objects.get('rig0') is None:
-        print("Please import a dae from SketchUp and then run setupDAEEnv(<float radius>)")
+        print("Please import a dae from SketchUp and then run setupDAEEnv() - see script for details")
         return
     
     print("Rendering RGB-D from current DAE. This might take a while...")
@@ -336,13 +509,14 @@ def renderDAE():
         bpy.data.scenes[sceneName].render.resolution_y = 400
         bpy.data.scenes[sceneName].render.resolution_percentage = 100
         
-        # render RGB
-        
+        # render RGB    
         context.scene.render.filepath = os.path.join(daeRenderPath, c.name + "-RGB")
         bpy.ops.render.render(write_still=True)
     
-    # TODO: and render the depth image for each camera
-    
+        # render D
+        #print("Generating depth map for: " + c.name)
+        renderDepthMap(c, "SL", daeRenderPath.split("/")[-1], daeCameraDimensions[0], daeCameraDimensions[1])
+        
     print("Done")
         
     
@@ -379,3 +553,9 @@ def importDAE(daePath):
     daeRenderPath = os.path.join("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn/", basePath)
     
     bpy.ops.wm.collada_import(filepath=daePath)
+    
+def testRenderSL():
+    importDAE("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/Doors/ArchDoor.dae")
+    setupDAEEnv("V2", 0, 7, 4)
+    grabSketchUp()
+    print("After tweaking the position, now run \"ImportAndRender.renderSL()\"")
