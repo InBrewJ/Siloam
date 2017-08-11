@@ -4,6 +4,10 @@
 # Currently steps 1-7 of the Blender workflow - import a spheremap, rotate it 
 # and add lights, then render RGB-D images
 #
+# This script can also import the DAE models downloaded from the trimble warehouse
+# and render them using two separate camera rigs - either a circular rig or a 
+# square/rectangular rig. Or both if it takes your fancy
+#
 # Step 8 of the Blender workflow is to try to clean up the meshes with meshlab
 # and see if SVM performance improves. This is probabaly for future work.
 #
@@ -46,6 +50,9 @@ def clearScene():
         
 def toRad(angle):
     return angle*(math.pi/180.0)
+
+def toDeg(angle):
+    return 180*(angle/math.pi)
 
 def createSSCameras(scene, context):
     ffcameraId = 0
@@ -131,7 +138,7 @@ def renderDepthMap(c, mode, folder, near, far):
         # a more compact way, like the one found in createDAECamerasV2
         # but this allows greater tuning of the near/far variables
         
-        # for near 0.3 is an experimental factor for now...
+        # for near 0.3 is an experimental near factor
         
         # Corners first
         if (currentX == 0 and currentY == 0) or \
@@ -139,7 +146,7 @@ def renderDepthMap(c, mode, folder, near, far):
            (currentX == dimX-1 and currentY == 0) or \
            (currentX == dimX-1 and currentY == dimY-1):
             MRNode.inputs[1].default_value = 0.3
-            # + 0.2 is an experimental factor
+            # + 0.5 is an experimental factor
             MRNode.inputs[2].default_value = math.sqrt((dimX**2.0) + (dimY**2.0)) + 0.5
             
         elif (currentY == 0 and (currentX > 0 and currentX < dimX-1)) or \
@@ -147,6 +154,14 @@ def renderDepthMap(c, mode, folder, near, far):
             # Bottom and top edges
             MRNode.inputs[1].default_value = 0.3
             MRNode.inputs[2].default_value = float(dimY)/2.0 + 1.0
+            
+            # check the z euler angle for the rotation of the camera
+            # about the z axis
+            
+            if int(toDeg(c.rotation_euler[2])) % 90 != 0:
+                MRNode.inputs[2].default_value = math.sqrt((dimX**2.0) + (dimY**2.0)) + 0.5
+            else:
+                MRNode.inputs[2].default_value = float(dimY)/2.0 + 1.0
             
         elif ((currentX == 0 or currentX == dimX-1) and (currentY > 0 and currentY < dimY)):
             # Side edges   
@@ -156,12 +171,13 @@ def renderDepthMap(c, mode, folder, near, far):
         print("Mode must be [SS or SL], try again!")
             
     # debugging
-    if c.name == "rig509":
+    if c.name == "rig156":
         print("dimX: " + str(dimX))
         print("dimY: " + str(dimY))
         print("currentX: " + str(currentX))
         print("currentY: " + str(currentY))
-        print("Location of 509: " + str(c.location))
+        print("Location of 156: " + str(c.location))
+        print("Rotation of 156: " + str(c.rotation_euler))
         print("Near for " + str(c.name) + ": " + str(MRNode.inputs[1].default_value))
         print("Far for " + str(c.name) + ": " + str(MRNode.inputs[2].default_value))
             
@@ -465,6 +481,8 @@ def setupDAEEnv(version, radius, x, y):
             print("Version must be [V1 or V2]")
 
     print("Done")
+    grabSketchUp()
+    print("SketchUp model is grabbed. Move at will...")
     
 # gradCams() - simple function that selects all the cameras so they can be
 # translated as a group
