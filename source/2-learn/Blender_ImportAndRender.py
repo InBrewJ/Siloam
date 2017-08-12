@@ -1,5 +1,5 @@
 #
-# ImportAndRender_Blender.py
+# Blender_ImportAndRender.py
 # 
 # Currently steps 1-7 of the Blender workflow - import a spheremap, rotate it 
 # and add lights, then render RGB-D images
@@ -16,7 +16,7 @@
 #
 # There's a fair amount of repeated code - yes it needs refactoring, granted.
 # The camera naming is a bit all over the placing when comparing SS and SL
-# too
+# too. The paths are also all over the place and are very original-dev-specific
 #
 
 import bpy                    # for all blender functionality
