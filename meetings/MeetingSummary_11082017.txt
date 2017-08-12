@@ -1,0 +1,54 @@
+MSc Project - Geospatial Database Meeting
+Neil and Jason - EEE Foyer, University of Liverpool
+11/08/2017
+
+Key Points:
+
+-> Mapping is now complete - 76 mapping points in total. Size of exported and
+   unzipped obj, mtl and dat files = 1.58GB
+
+-> The loan Phab 2 Pro was used for a mapping run on Thursday 10th August. Everything
+   went about as well as expected. If there is a lottery effect on mobile GPS sensors,
+   the module in the loan device certainly wasn't any more or less accurate or precise.
+
+-> Went over Jason's progress, the Blender python work is now done. Square/rectangular camera
+   rigs can now be created around DAE models downloaded from Trimble warehouse, producing
+   a varying numbers of RGB-D renderings depending on (user definable) dimensions of the rig.
+
+-> We will stick with the SVM for machine learning for now, using the C++ implmentation
+   of LIBSVM. LIBSVM is not natively parallelised. Please see:
+
+   http://www.csie.ntu.edu.tw/~cjlin/libsvm/faq.html#f432
+
+   (and then search for "parallelize") for details on how to parallelise using OpenMP.
+   A single threaded SVM will be implemented first whatever happens though. Time is
+   running short.
+
+   The SVM will be built around the ideas discussed in the paper
+   "Covariance based point cloud descriptors for object detection and recognition"
+   by Fehr et al. available via Science Direct.
+
+-> Some thoughts on the future of the project were also discussed. Other data, e.g. the
+   map of the campus that all students are given at the start of the year could be
+   assimilated (or used to augment) OSM data. Original building plans/council planning
+   permissions could also be used. The list is endless. This is even more of a computer
+   vision/GIS task than the current project.
+
+   Arup also operates an 80/20 policy like Google used to - so even if a KTP was put in
+   place I could still continue to work on this project on my "20" day.
+
+-> The dimensions of the RGB-D images (which will be 3*8xwxh for RGB and 8xw*h for D)
+   was also discussed. All images rendered so far are 400x400 - w and h will be experimental
+   parameters and will heavily affect the generation speed of covariance descriptors.
+
+-> There was also another chat about publication, probably in a conference proceedings
+   somewhere. This will be reviewed much later!
+
+Next Tasks:
+
+-> Crack on with the SVM, make something work before we start messing about with the
+   parameters
+
+Next meeting:
+
+-> TDB
