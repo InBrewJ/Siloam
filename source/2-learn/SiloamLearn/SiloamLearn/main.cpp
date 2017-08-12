@@ -4,10 +4,11 @@
 //  main.cpp
 //  SiloamLearn
 //
-//
+//  
 //
 //  Created by Jason  Brewer on 11/08/2017.
-//  Copyright © 2017 University of Liverpool. All rights reserved.
+//  License review pending. But probably released under something
+//  to do with BSD/Apache
 //
 
 #include <iostream>
