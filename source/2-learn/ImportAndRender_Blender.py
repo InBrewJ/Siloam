@@ -1,5 +1,5 @@
 #
-# ImportAndRender.py
+# ImportAndRender_Blender.py
 # 
 # Currently steps 1-7 of the Blender workflow - import a spheremap, rotate it 
 # and add lights, then render RGB-D images
