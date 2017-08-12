@@ -12,10 +12,16 @@
 //
 
 #include <iostream>
+#include "image_processor.hpp"
 
 int main(int argc, const char * argv[]) {
     
-    std::cout << "SVM testing complete! Nah, just kidding\n";
+    // The path below will of course be defined on the command line in the future
     
+    ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders");
+    
+    image_processor.Walk();
+    
+    std::cout << "SVM testing complete! Nah, just kidding" << std::endl;
     return 0;
 }
