@@ -22,30 +22,15 @@ using namespace boost::filesystem;
 
 class ImageProcessor {
 public:
-    ImageProcessor(std::string img_path) {
-        img_path_ = img_path;
-    }
     
-    inline void PrintProcessingPath() {
-        std::cout << img_path_ << std::endl;
-    }
+    ImageProcessor(std::string img_path);
     
-    void Walk() {
-        path current_dir(img_path_); //
-        boost::regex pattern(".*\.png"); // list all files starting with a
-        for (recursive_directory_iterator iter(current_dir), end;
-             iter != end;
-             ++iter)
-        {
-            std::string name = iter->path().filename().string();
-            if (regex_match(name, pattern))
-                std::cout << iter->path() << "\n";
-        }
-    }
+    inline void PrintProcessingPath();
+    
+    void Walk();
     
 private:
     std::string img_path_;
-    
     
 };
 
