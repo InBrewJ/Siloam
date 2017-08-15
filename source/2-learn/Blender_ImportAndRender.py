@@ -96,6 +96,8 @@ def createSSCameras(scene, context):
 def renderDepthMap(c, mode, folder, near, far):
     global daeCameraDimensions
     
+    print("Generating depth map for: " + c.name)
+    
     # switch on nodes and get reference
     bpy.context.scene.use_nodes = True
     tree = bpy.context.scene.node_tree
@@ -197,10 +199,10 @@ def renderDepthMap(c, mode, folder, near, far):
     # render the depth image
     if mode == "SS":
         # For SiloamSee renders
-        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name + "-D"])
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "D"])
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name + "-D"])
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name.split(".")[0], "D"])
         
     bpy.ops.render.render(write_still=True)
         
@@ -208,7 +210,79 @@ def renderDepthMap(c, mode, folder, near, far):
     for node in tree.nodes:
         tree.nodes.remove(node)
      
-    bpy.context.scene.use_nodes = False    
+    bpy.context.scene.use_nodes = False 
+    
+def renderBw(c, mode, folder):
+    print("Rendering image intensity...")
+    bpy.data.scenes[objName].render.image_settings.color_mode = "BW"
+    
+    if mode == "SS":
+        # For SiloamSee renders
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "I"])
+    elif mode == "SL":
+        # For SiloamLearn (trimble model) renders
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name.split(".")[0], "I"])
+        
+    bpy.ops.render.render(write_still=True)
+    
+    # reset to RGB space to render the depth maps correctly?
+    # This is just to be extra safe
+    bpy.data.scenes[objName].render.image_settings.color_mode = "RGB"
+    
+# Below is very similar to renderDepthMap
+
+def renderNormals(c, mode, folder):
+    print("Generating normals in RGB space...")
+    if mode == "SS":
+        bpy.data.scenes[objName].render.layers["RenderLayer"].use_pass_normal = True;
+    elif mode == "SL":
+        bpy.data.scenes[sceneName].render.layers["RenderLayer"].use_pass_normal = True;
+    
+    # switch on nodes and get reference
+    bpy.context.scene.use_nodes = True
+    tree = bpy.context.scene.node_tree
+    
+    #print("Removing default nodes")
+    
+    # clear default nodes
+    for node in tree.nodes:
+        tree.nodes.remove(node)
+        
+    # Create the render layers, map range and composite nodes
+        
+    RLNode = tree.nodes.new(type='CompositorNodeRLayers')
+    RLNode.location = 0,0
+    
+    CNode = tree.nodes.new(type='CompositorNodeComposite')
+    CNode.location = 400,0
+    
+    # link the nodes
+    
+    links = tree.links
+    link = links.new(RLNode.outputs[3], CNode.inputs[0])
+    
+    # render the depth image
+    if mode == "SS":
+        # For SiloamSee renders
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "N"])
+    elif mode == "SL":
+        # For SiloamLearn (trimble model) renders
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name.split(".")[0], "N"])
+        
+    bpy.ops.render.render(write_still=True)
+        
+    # clear nodes again and disable nodes
+    for node in tree.nodes:
+        tree.nodes.remove(node)
+     
+    bpy.context.scene.use_nodes = False 
+    
+    # deactivate the normal pass, just to be safe
+    
+    if mode == "SS":
+        bpy.data.scenes[objName].render.layers["RenderLayer"].use_pass_normal = False;
+    elif mode == "SL":
+        bpy.data.scenes[sceneName].render.layers["RenderLayer"].use_pass_normal = False;
     
 def renderSS(objPath, folder):
     
@@ -264,24 +338,29 @@ def renderSS(objPath, folder):
     bpy.data.scenes[objName].render.resolution_percentage = 100
     
     for c in cams:
+        # Set compression level
+        bpy.data.scenes[objName].render.image_settings.compression = 0
+        bpy.data.scenes[objName].render.image_settings.color_mode = "RGB"
         context.scene.camera = c                                    
         print("Render ", objName, context.scene.name, c.name)
-        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name + "-RGB"])
+        print("Rendering RGB...")
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "RGB"])
         bpy.ops.render.render(write_still=True)
         
         # set up nodes for creating depth maps
         
         if "forwards" in c.name:
-            print("Generating depth map for: " + c.name)
             renderDepthMap(c, "SS", folder, 0.720, 2.750)
-             
+            renderBw(c, "SS", folder)
+            renderNormals(c, "SS", folder)
+            
     # copy the .dat file from the obj folder into the render folder
     print("Copying dat file...")
     copyfile(os.path.join(modelPath, "gpsAndHeading.dat"), os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, "gpsAndHeading.dat"]))
         
 def renderOnce():
     clearScene()
-    renderSS("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/", "SiloamSee-170725-203831-train")
+    renderSS("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/models/obj/", "SiloamSee-170725-203831-gt")
 
 # runSS(objPath) function - to be called from the python console window
 
@@ -528,12 +607,16 @@ def renderSL():
         bpy.data.scenes[sceneName].render.resolution_percentage = 100
         
         # render RGB    
-        context.scene.render.filepath = os.path.join(daeRenderPath, c.name + "-RGB")
+        context.scene.render.filepath = os.path.join(daeRenderPath, c.name.split(".")[0], "RGB")
         bpy.ops.render.render(write_still=True)
     
         # render D
         #print("Generating depth map for: " + c.name)
         renderDepthMap(c, "SL", daeRenderPath.split("/")[-1], daeCameraDimensions[0], daeCameraDimensions[1])
+        # render I
+        renderBw(c, "SL", folder)
+        # render N
+        renderNormals(c, "SL", folder)
         
     print("Done")
         

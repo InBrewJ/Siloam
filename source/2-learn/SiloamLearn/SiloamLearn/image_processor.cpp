@@ -12,10 +12,6 @@ ImageProcessor::ImageProcessor(std::string img_path) {
     img_path_ = img_path;
 }
 
-void ImageProcessor::PrintProcessingPath() {
-    std::cout << img_path_ << std::endl;
-}
-
 void ImageProcessor::Walk() {
     path current_dir(img_path_); //
     boost::regex pattern(".*\.png"); // list all files starting with a

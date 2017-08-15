@@ -25,7 +25,9 @@ public:
     
     ImageProcessor(std::string img_path);
     
-    inline void PrintProcessingPath();
+    inline void PrintProcessingPath() {
+        std::cout << img_path_ << std::endl;
+    };
     
     void Walk();
     
