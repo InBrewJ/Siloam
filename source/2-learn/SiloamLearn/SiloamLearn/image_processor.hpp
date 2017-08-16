@@ -15,8 +15,11 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
+#include <cstring>
+#include "png_utilities.hpp"
 
 using namespace boost::filesystem;
 
@@ -31,8 +34,11 @@ public:
     
     void Walk();
     
+    void PrintPngInfo();
+    
 private:
     std::string img_path_;
+    std::vector<std::string> png_paths_;
     
 };
 

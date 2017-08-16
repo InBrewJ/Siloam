@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		2A7A8C381F3D875C005B7A21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C371F3D875C005B7A21 /* main.cpp */; };
 		2A7A8C401F3F697F005B7A21 /* feature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C3E1F3F697F005B7A21 /* feature.cpp */; };
-		2A7A8C431F3F699A005B7A21 /* siloamlearn_svm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C411F3F699A005B7A21 /* siloamlearn_svm.cpp */; };
+		2A7A8C431F3F699A005B7A21 /* rbf_svm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C411F3F699A005B7A21 /* rbf_svm.cpp */; };
 		2A7A8C461F3F6C32005B7A21 /* silo_link.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C441F3F6C32005B7A21 /* silo_link.cpp */; };
 		2A7A8C491F3F6EF1005B7A21 /* image_processor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C471F3F6EF1005B7A21 /* image_processor.cpp */; };
 		2A7A8C4F1F3F82BC005B7A21 /* svm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C4D1F3F82BC005B7A21 /* svm.cpp */; };
 		2A7A8C511F3FCAD8005B7A21 /* libboost_regex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A7A8C501F3FCAD8005B7A21 /* libboost_regex.dylib */; };
 		2A7A8C531F3FCAE7005B7A21 /* libboost_filesystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A7A8C521F3FCAE7005B7A21 /* libboost_filesystem.dylib */; };
+		2AAFD1AB1F43C4CB00E92D7D /* libpng16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AAFD1AA1F43C4CB00E92D7D /* libpng16.dylib */; };
+		2AAFD1AD1F43C7F500E92D7D /* png_utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2AAFD1AC1F43C7F500E92D7D /* png_utilities.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,8 +36,8 @@
 		2A7A8C371F3D875C005B7A21 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2A7A8C3E1F3F697F005B7A21 /* feature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = feature.cpp; sourceTree = "<group>"; };
 		2A7A8C3F1F3F697F005B7A21 /* feature.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = feature.hpp; sourceTree = "<group>"; };
-		2A7A8C411F3F699A005B7A21 /* siloamlearn_svm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = siloamlearn_svm.cpp; sourceTree = "<group>"; };
-		2A7A8C421F3F699A005B7A21 /* siloamlearn_svm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = siloamlearn_svm.hpp; sourceTree = "<group>"; };
+		2A7A8C411F3F699A005B7A21 /* rbf_svm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rbf_svm.cpp; sourceTree = "<group>"; };
+		2A7A8C421F3F699A005B7A21 /* rbf_svm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rbf_svm.hpp; sourceTree = "<group>"; };
 		2A7A8C441F3F6C32005B7A21 /* silo_link.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = silo_link.cpp; sourceTree = "<group>"; };
 		2A7A8C451F3F6C32005B7A21 /* silo_link.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = silo_link.hpp; sourceTree = "<group>"; };
 		2A7A8C471F3F6EF1005B7A21 /* image_processor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image_processor.cpp; sourceTree = "<group>"; };
@@ -44,6 +46,9 @@
 		2A7A8C4E1F3F82BC005B7A21 /* svm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = svm.h; path = ../../libsvm/svm.h; sourceTree = "<group>"; };
 		2A7A8C501F3FCAD8005B7A21 /* libboost_regex.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_regex.dylib; path = ../../../../../../../../../../../usr/local/Cellar/boost/1.64.0_1/lib/libboost_regex.dylib; sourceTree = "<group>"; };
 		2A7A8C521F3FCAE7005B7A21 /* libboost_filesystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_filesystem.dylib; path = ../../../../../../../../../../../usr/local/Cellar/boost/1.64.0_1/lib/libboost_filesystem.dylib; sourceTree = "<group>"; };
+		2AAFD1A91F43C42A00E92D7D /* png_utilities.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = png_utilities.hpp; sourceTree = "<group>"; };
+		2AAFD1AA1F43C4CB00E92D7D /* libpng16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.dylib; path = ../../../../../../../../../../../usr/local/Cellar/libpng/1.6.31/lib/libpng16.dylib; sourceTree = "<group>"; };
+		2AAFD1AC1F43C7F500E92D7D /* png_utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = png_utilities.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +57,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A7A8C511F3FCAD8005B7A21 /* libboost_regex.dylib in Frameworks */,
+				2AAFD1AB1F43C4CB00E92D7D /* libpng16.dylib in Frameworks */,
 				2A7A8C531F3FCAE7005B7A21 /* libboost_filesystem.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -64,6 +70,7 @@
 			children = (
 				2A7A8C501F3FCAD8005B7A21 /* libboost_regex.dylib */,
 				2A7A8C521F3FCAE7005B7A21 /* libboost_filesystem.dylib */,
+				2AAFD1AA1F43C4CB00E92D7D /* libpng16.dylib */,
 				2A7A8C361F3D875C005B7A21 /* SiloamLearn */,
 				2A7A8C351F3D875C005B7A21 /* Products */,
 			);
@@ -85,12 +92,14 @@
 				2A7A8C371F3D875C005B7A21 /* main.cpp */,
 				2A7A8C3E1F3F697F005B7A21 /* feature.cpp */,
 				2A7A8C3F1F3F697F005B7A21 /* feature.hpp */,
-				2A7A8C411F3F699A005B7A21 /* siloamlearn_svm.cpp */,
-				2A7A8C421F3F699A005B7A21 /* siloamlearn_svm.hpp */,
+				2A7A8C411F3F699A005B7A21 /* rbf_svm.cpp */,
+				2A7A8C421F3F699A005B7A21 /* rbf_svm.hpp */,
 				2A7A8C441F3F6C32005B7A21 /* silo_link.cpp */,
 				2A7A8C451F3F6C32005B7A21 /* silo_link.hpp */,
 				2A7A8C471F3F6EF1005B7A21 /* image_processor.cpp */,
 				2A7A8C481F3F6EF1005B7A21 /* image_processor.hpp */,
+				2AAFD1A91F43C42A00E92D7D /* png_utilities.hpp */,
+				2AAFD1AC1F43C7F500E92D7D /* png_utilities.cpp */,
 			);
 			path = SiloamLearn;
 			sourceTree = "<group>";
@@ -153,10 +162,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A7A8C4F1F3F82BC005B7A21 /* svm.cpp in Sources */,
-				2A7A8C431F3F699A005B7A21 /* siloamlearn_svm.cpp in Sources */,
+				2A7A8C431F3F699A005B7A21 /* rbf_svm.cpp in Sources */,
 				2A7A8C401F3F697F005B7A21 /* feature.cpp in Sources */,
 				2A7A8C461F3F6C32005B7A21 /* silo_link.cpp in Sources */,
 				2A7A8C381F3D875C005B7A21 /* main.cpp in Sources */,
+				2AAFD1AD1F43C7F500E92D7D /* png_utilities.cpp in Sources */,
 				2A7A8C491F3F6EF1005B7A21 /* image_processor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,13 +266,23 @@
 		2A7A8C3C1F3D875C005B7A21 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/Cellar/boost/1.64.0_1/include;
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					/usr/local/Cellar/boost/1.64.0_1/include,
+					/usr/local/Cellar/libpng/1.6.31/include,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/boost/1.64.0_1/lib,
+					/usr/local/Cellar/libpng/1.6.31/lib,
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/Cellar/boost/1.64.0_1/lib;
-				OTHER_LDFLAGS = "-lboost_system";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					/usr/local/Cellar/boost/1.64.0_1/lib,
+					/usr/local/Cellar/libpng/1.6.31/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lboost_system",
+					"-lpng",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -270,13 +290,23 @@
 		2A7A8C3D1F3D875C005B7A21 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/Cellar/boost/1.64.0_1/include;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/boost/1.64.0_1/include,
+					/usr/local/Cellar/libpng/1.6.31/include,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/boost/1.64.0_1/lib,
+					/usr/local/Cellar/libpng/1.6.31/lib,
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/Cellar/boost/1.64.0_1/lib;
-				OTHER_LDFLAGS = "-lboost_system";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					/usr/local/Cellar/boost/1.64.0_1/lib,
+					/usr/local/Cellar/libpng/1.6.31/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lboost_system",
+					"-lpng",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -300,6 +330,7 @@
 				2A7A8C3D1F3D875C005B7A21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

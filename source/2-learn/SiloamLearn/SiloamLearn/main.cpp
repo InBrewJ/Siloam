@@ -21,7 +21,7 @@ int main(int argc, const char * argv[]) {
     ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders");
     
     image_processor.Walk();
-    image_processor.PrintProcessingPath();
+    image_processor.PrintPngInfo();
     
     std::cout << "SVM testing complete! Nah, just kidding" << std::endl;
     return 0;

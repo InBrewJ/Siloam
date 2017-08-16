@@ -10,5 +10,12 @@
 #define feature_hpp
 
 #include <stdio.h>
+#include <vector>
+
+class Feature {
+public:
+    Feature();
+    ~Feature();
+};
 
 #endif /* feature_hpp */
