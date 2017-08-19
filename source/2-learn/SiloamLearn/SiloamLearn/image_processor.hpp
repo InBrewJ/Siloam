@@ -38,7 +38,9 @@ public:
     
 private:
     std::string img_path_;
-    std::vector<std::string> png_paths_;
+    std::vector<std::string> train_png_paths_;
+    std::vector<std::string> test_png_paths_;
+    std::vector<std::string> ground_truth_png_paths_;
     
 };
 

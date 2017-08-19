@@ -202,7 +202,7 @@ def renderDepthMap(c, mode, folder, near, far):
         bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "D"])
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name.split(".")[0], "D"])
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder + "-train", c.name.split(".")[0], "D"])
         
     bpy.ops.render.render(write_still=True)
         
@@ -221,7 +221,7 @@ def renderBw(c, mode, folder):
         bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "I"])
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name.split(".")[0], "I"])
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder + "-train", c.name.split(".")[0], "I"])
         
     bpy.ops.render.render(write_still=True)
     
@@ -267,7 +267,7 @@ def renderNormals(c, mode, folder):
         bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "N"])
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder, c.name.split(".")[0], "N"])
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder + "-train", c.name.split(".")[0], "N"])
         
     bpy.ops.render.render(write_still=True)
         
@@ -607,7 +607,7 @@ def renderSL():
         bpy.data.scenes[sceneName].render.resolution_percentage = 100
         
         # render RGB    
-        context.scene.render.filepath = os.path.join(daeRenderPath, c.name.split(".")[0], "RGB")
+        context.scene.render.filepath = os.path.join(daeRenderPath + "-train", c.name.split(".")[0], "RGB")
         bpy.ops.render.render(write_still=True)
     
         # render D
