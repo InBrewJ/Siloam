@@ -1,0 +1,29 @@
+MSc Project - Geospatial Database Meeting
+Vitaliy, Neil and Jason
+Ashton Building Room 221, University of Liverpool
+14/08/2017
+
+Key Points:
+
+-> The final database will be populated on a version hosted locally on Jason's
+   machine. There will be functionality within the SiloamLearn C++ executable to
+   export the JSON encoded feature database to a file. This can easily be sent to
+   Sandra via email and she can populate a separate local couchbase server node
+   on her own machine. Dave Shield never got back to me about any University web
+   storage so this will have to do. SiloamLearn will also have various command line
+   arguments, one of which will be the IP/URL and port number of a final couchbase
+   server node.
+
+-> Since Ed Pyzer-Knapp and colleagues are rather busy, Neil's PhD supervisor
+   Dr Thiyagalingam Jeyarajan has kindly offered to lend a hand in any issues regarding
+   the SVM. An email introduction has been made and he's also kindly willing to
+   give some help face to face.
+
+
+Next Tasks:
+
+-> Final push to get the SVM trained and tested. Things are coming together!
+
+Next Meeting:
+
+-> Wednesday 23rd August, STFC (time TBC)
