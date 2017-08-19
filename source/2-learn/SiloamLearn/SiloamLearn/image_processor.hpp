@@ -32,9 +32,13 @@ public:
         std::cout << img_path_ << std::endl;
     };
     
-    void Walk();
+    void GetDataset();
     
     void PrintPngInfo();
+    
+    void GeneratePointClouds();
+    
+    void PrintRgbPaths();
     
 private:
     std::string img_path_;

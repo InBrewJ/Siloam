@@ -12,7 +12,7 @@ ImageProcessor::ImageProcessor(std::string img_path) {
     img_path_ = img_path;
 }
 
-void ImageProcessor::Walk() {
+void ImageProcessor::GetDataset() {
     path current_dir(img_path_);
     
     boost::regex train_pattern(".*train.*forwards.*\.png");
@@ -55,9 +55,36 @@ void ImageProcessor::PrintPngInfo() {
               << "\n\tGround Truth PNGs: " << ground_truth_png_paths_.size()
               << "\n\n";
     
-    // Read the png file and print out the contents of each pixel
+}
+
+void ImageProcessor::PrintRgbPaths() {
     
-    //read_png_file(png_paths_.back().c_str());
-    //process_png_file();
-                  
+    boost::regex rgb_pattern(".*RGB\.png");
+    
+    for (auto const& path: train_png_paths_) {
+        if ( regex_match(path, rgb_pattern) ) {
+            std::cout << path << std::endl;
+        }
+    }
+    
+    for (auto const& path: test_png_paths_) {
+        if ( regex_match(path, rgb_pattern) ) {
+            std::cout << path << std::endl;
+        }
+    }
+    
+    for (auto const& path: ground_truth_png_paths_) {
+        if ( regex_match(path, rgb_pattern) ) {
+            std::cout << path << std::endl;
+        }
+    }
+    
+}
+
+void ImageProcessor::GeneratePointClouds() {
+    
+    for (auto const& path: train_png_paths_) {
+        std::cout << path << std::endl;
+    }
+    
 }

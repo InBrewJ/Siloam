@@ -23,6 +23,14 @@
 #include <stdio.h>
 #include <png.h>
 
+// The width/height here are essentially arbitrary,
+// but 400x400 is enough that I can pick out details
+// myself on a screen and also enough detail for the
+// covariance generation process
+
+#define PNG_WIDTH 400
+#define PNG_HEIGHT 400
+
 void read_png_file(const char *filename);
 
 void write_png_file(const char *filename);
@@ -30,5 +38,11 @@ void write_png_file(const char *filename);
 bool dead_png();
 
 void process_png_file();
+
+struct Voxel {
+    int x;
+    int y;
+    int z;
+};
 
 #endif /* png_utilities_hpp */

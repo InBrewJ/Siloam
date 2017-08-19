@@ -8,8 +8,11 @@
 //
 //  Created by Jason  Brewer on 11/08/2017.
 //  License review pending. But probably released under something
-//  to do with BSD/Apache
+//  to do with BSD/Apache. Probably Apache.
 //
+
+// sandbox folder:
+// /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox
 
 #include <iostream>
 #include "image_processor.hpp"
@@ -20,9 +23,10 @@ int main(int argc, const char * argv[]) {
     
     ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders");
     
-    image_processor.Walk();
+    image_processor.GetDataset();
     image_processor.PrintPngInfo();
+    image_processor.PrintRgbPaths();
     
-    std::cout << "SVM testing complete! Nah, just kidding" << std::endl;
+    
     return 0;
 }
