@@ -129,39 +129,50 @@ void write_png_file(const char *filename) {
     fclose(fp);
 }
 
-// TODO: takes an enum to process the image in a certain way
 // This needs to generate the point cloud, and all sobel
 // operations
 
-void process_png_file(PngOperation operation) {
+PointCloud* process_png_file(PngOperation operation) {
     
     switch(operation) {
         case kPointCloud: {
-            for(int y = 0; y < height; y++) {
-                png_bytep row = row_pointers[y];
-                for(int x = 0; x < width; x++) {
-                    png_bytep px = &(row[x * 4]);
-                    // Make every non black pixel yellow for no good reason
-                    if (px[0] != 0) {
-                        px[0] = 255;
-                        px[1] = 255;
-                        px[2] = 11;
+            PointCloud* temp_point_cloud = new PointCloud[kPngHeight];
+            
+                for(int y = 0; y < height; y++) {
+                    png_bytep row = row_pointers[y];
+                    for(int x = 0; x < width; x++) {
+                        png_bytep px = &(row[x * 4]);
+                        
+                        if (px[0] != 0) {
+                            temp_point_cloud[y][x]->x = x;
+                            temp_point_cloud[y][x]->y = y;
+                            temp_point_cloud[y][x]->z = px[0];
+                        } else {
+                            temp_point_cloud[y][x]->x = -1;
+                            temp_point_cloud[y][x]->y = -1;
+                            temp_point_cloud[y][x]->z = -1;
+                        }
+                        
+                        //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
                     }
-                    //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
                 }
-            }
+            return temp_point_cloud;
             break;
         }
         case kSobelX: {
+            // Implement sobel in X direction
             break;
         }
         case kSobelY: {
+            // Implement sobel in Y direction
             break;
         }
         case kSobelMagnitude: {
+            // Find magnitude of gradient (full sobel?)
             break;
         }
     }
+    return nullptr;
 }
 
 // Start from the bottom left of the PNG and traverse upwards.

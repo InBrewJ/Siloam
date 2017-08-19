@@ -33,18 +33,20 @@ const int kPngHeight = 400;
 
 enum PngOperation {kPointCloud, kSobelX, kSobelY, kSobelMagnitude};
 
+struct SimpleVoxel {
+    int x;
+    int y;
+    int z;
+};
+
+typedef SimpleVoxel PointCloud[kPngHeight][kPngWidth];
+
 void read_png_file(const char *filename);
 
 void write_png_file(const char *filename);
 
 bool dead_png();
 
-void process_png_file(PngOperation operation);
-
-struct Voxel {
-    int x;
-    int y;
-    int z;
-};
+PointCloud* process_png_file(PngOperation operation);
 
 #endif /* png_utilities_hpp */

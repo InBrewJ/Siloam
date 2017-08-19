@@ -83,6 +83,8 @@ void ImageProcessor::PrintRgbPaths() {
 
 void ImageProcessor::GeneratePointClouds() {
     
+    PointCloud* point_cloud = new PointCloud[kPngHeight];
+    
     // Use std::string::find to get the I.png!
     
     std::vector<std::string> intensity_files;
@@ -98,8 +100,17 @@ void ImageProcessor::GeneratePointClouds() {
     
     read_png_file(intensity_files.back().c_str());
     // Just makes everything yellow at the moment
-    process_png_file(kPointCloud);
+    point_cloud = process_png_file(kPointCloud);
     write_png_file("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox/test.png");
+    
+    for (int y = 0; y < kPngHeight; y++) {
+        for (int x = 0; x < kPngWidth; x++) {
+            printf("%4d, %4d = Voxel(%3d, %3d, %3d)\n", x, y,
+                   point_cloud[y][x]->x,
+                   point_cloud[y][x]->y,
+                   point_cloud[y][x]->z);
+        }
+    }
     
                   
     
