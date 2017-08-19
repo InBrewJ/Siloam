@@ -28,8 +28,10 @@
 // myself on a screen and also enough detail for the
 // covariance generation process
 
-#define PNG_WIDTH 400
-#define PNG_HEIGHT 400
+const int kPngWidth = 400;
+const int kPngHeight = 400;
+
+enum PngOperation {kPointCloud, kSobelX, kSobelY, kSobelMagnitude};
 
 void read_png_file(const char *filename);
 
@@ -37,7 +39,7 @@ void write_png_file(const char *filename);
 
 bool dead_png();
 
-void process_png_file();
+void process_png_file(PngOperation operation);
 
 struct Voxel {
     int x;

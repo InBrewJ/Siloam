@@ -83,8 +83,24 @@ void ImageProcessor::PrintRgbPaths() {
 
 void ImageProcessor::GeneratePointClouds() {
     
+    // Use std::string::find to get the I.png!
+    
+    std::vector<std::string> intensity_files;
+    
     for (auto const& path: train_png_paths_) {
-        std::cout << path << std::endl;
+        if ( path.find("I.png") != std::string::npos ) {
+            intensity_files.push_back(path);
+        }
     }
+    
+    std::cout << "I file under test: " << std::endl;
+    std::cout << intensity_files.back() << std::endl;
+    
+    read_png_file(intensity_files.back().c_str());
+    // Just makes everything yellow at the moment
+    process_png_file(kPointCloud);
+    write_png_file("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox/test.png");
+    
+                  
     
 }

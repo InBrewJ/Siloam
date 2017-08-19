@@ -1,7 +1,7 @@
 # labelled SiloamLearn data for training and evaluation purposes
 # First is the path, then a binary indicator for:
 # 
-# busstop crossing door steps
+# bus_stop crossing door steps
 #
 # models from the Trimble warehouse are obviously already
 # labelled via the directory structure

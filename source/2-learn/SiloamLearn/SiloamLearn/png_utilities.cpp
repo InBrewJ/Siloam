@@ -123,25 +123,48 @@ void write_png_file(const char *filename) {
     }
     
     // Clean up
-    free(row_pointers);
     if (png && info)
         png_destroy_write_struct(&png, &info);
     
     fclose(fp);
 }
 
-void process_png_file() {
-    for(int y = 0; y < height; y++) {
-        png_bytep row = row_pointers[y];
-        for(int x = 0; x < width; x++) {
-            png_bytep px = &(row[x * 4]);
-            // Do something awesome for each pixel here...
-            printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+// TODO: takes an enum to process the image in a certain way
+// This needs to generate the point cloud, and all sobel
+// operations
+
+void process_png_file(PngOperation operation) {
+    
+    switch(operation) {
+        case kPointCloud: {
+            for(int y = 0; y < height; y++) {
+                png_bytep row = row_pointers[y];
+                for(int x = 0; x < width; x++) {
+                    png_bytep px = &(row[x * 4]);
+                    // Make every non black pixel yellow for no good reason
+                    if (px[0] != 0) {
+                        px[0] = 255;
+                        px[1] = 255;
+                        px[2] = 11;
+                    }
+                    //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+                }
+            }
+            break;
+        }
+        case kSobelX: {
+            break;
+        }
+        case kSobelY: {
+            break;
+        }
+        case kSobelMagnitude: {
+            break;
         }
     }
 }
 
-// Start from the bottom of the PNG and traverse upwards.
+// Start from the bottom left of the PNG and traverse upwards.
 // We are likely to find a non-black pixel lower down the image
 // because of the floor region
 
@@ -154,6 +177,7 @@ bool dead_png() {
             
             // Definitely not the most efficient way
             // to do it, but there we are
+            
             if(px[0] != 0 || px[1] != 0 || px[2] != 0) {
                 return false;
             }
