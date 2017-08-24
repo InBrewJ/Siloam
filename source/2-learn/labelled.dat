@@ -15,7 +15,7 @@
 # models from the Trimble warehouse are obviously already
 # labelled via the directory structure
 #
-# lines beginning with a "hash" character are comments
+# lines beginning with a "hash" character are single line comments
 #
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-195412-train/forwards0/RGB.png 0 0 0 0
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-195412-train/forwards1/RGB.png 0 0 0 0
@@ -196,26 +196,26 @@
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170802-203834-train/forwards8/RGB.png 0 0 0 0
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170802-203834-train/forwards9/RGB.png 0 0 0 0
 #
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards0/RGB.png 
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards1/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards10/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards11/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards12/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards13/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards14/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards15/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards2/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards3/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards4/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards5/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards6/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards7/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards8/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards9/RGB.png
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards0/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards1/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards10/RGB.png 0 0 1 0 
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards11/RGB.png 0 0 1 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards12/RGB.png 0 0 1 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards13/RGB.png 0 0 1 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards14/RGB.png 0 0 1 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards15/RGB.png 0 0 1 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards2/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards3/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards4/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards5/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards6/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards7/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards8/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170810-193649-train/forwards9/RGB.png 0 0 0 0
 #
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards0/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards1/RGB.png
-/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards10/RGB.png
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards0/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards1/RGB.png 0 0 0 0
+/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards10/RGB.png 
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards11/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards12/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards13/RGB.png
@@ -421,7 +421,7 @@
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162557-train/forwards7/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162557-train/forwards8/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162557-train/forwards9/RGB.png
-# end of train
+# end of train PNGs
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-202010-test/forwards0/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-202010-test/forwards1/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-202010-test/forwards10/RGB.png
@@ -838,6 +838,7 @@
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162826-test/forwards7/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162826-test/forwards8/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162826-test/forwards9/RGB.png
+# end of test PNGs
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-203339-gt/forwards0/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-203339-gt/forwards1/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170725-203339-gt/forwards10/RGB.png
@@ -1238,3 +1239,4 @@
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-160756-gt/forwards7/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-160756-gt/forwards8/RGB.png
 /Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-160756-gt/forwards9/RGB.png
+# end of ground truth PNGs
