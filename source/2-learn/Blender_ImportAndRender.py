@@ -218,6 +218,9 @@ def renderDepthMap(c, mode, folder, near, far):
      
     bpy.context.scene.use_nodes = False 
     
+# The following function was written in a quick and very dirty way.
+# I apologise.
+
 def renderBw(c, mode, folder):
     print("Rendering image intensity...")
     
@@ -227,17 +230,14 @@ def renderBw(c, mode, folder):
         # For SiloamSee renders
         bpy.data.scenes[objName].render.image_settings.color_mode = "BW"
         bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "I"])
+        bpy.ops.render.render(write_still=True)
         bpy.data.scenes[objName].render.image_settings.color_mode = "RGB"
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
         bpy.data.scenes[sceneName].render.image_settings.color_mode = "BW"
         bpy.data.scenes[sceneName].render.filepath = os.path.join(*[daeRenderPath, c.name.split(".")[0], "I"])
+        bpy.ops.render.render(write_still=True)
         bpy.data.scenes[sceneName].render.image_settings.color_mode = "RGB"
-        
-    bpy.ops.render.render(write_still=True)
-    
-    
-    
     
 # Below is very similar to renderDepthMap
 
