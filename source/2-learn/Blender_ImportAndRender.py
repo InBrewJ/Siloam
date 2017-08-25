@@ -18,6 +18,11 @@
 # The camera naming is a bit all over the placing when comparing SS and SL
 # too. The paths are also all over the place and are very original-dev-specific
 #
+# This is also very much not OS agnostic - all of the paths are written for 
+# *nix like machines. 
+#
+# To clear the blender console command history:
+# bpy.ops.console.clear(scrollback=False, history=True)
 
 import bpy                    # for all blender functionality
 import os                     # for os file handling
@@ -34,6 +39,7 @@ sceneName = "Scene"
 daeCamGroup = []
 daeRenderPath = []
 daeCameraDimensions = []
+daeModelType = ""
 
 def clearScene():
     # Just to be pythonic and explicit
@@ -202,7 +208,7 @@ def renderDepthMap(c, mode, folder, near, far):
         bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "D"])
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder + "-train", c.name.split(".")[0], "D"])
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*[daeRenderPath, c.name.split(".")[0], "D"])
         
     bpy.ops.render.render(write_still=True)
         
@@ -214,20 +220,24 @@ def renderDepthMap(c, mode, folder, near, far):
     
 def renderBw(c, mode, folder):
     print("Rendering image intensity...")
-    bpy.data.scenes[objName].render.image_settings.color_mode = "BW"
-    
-    if mode == "SS":
-        # For SiloamSee renders
-        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "I"])
-    elif mode == "SL":
-        # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder + "-train", c.name.split(".")[0], "I"])
-        
-    bpy.ops.render.render(write_still=True)
     
     # reset to RGB space to render the depth maps correctly?
     # This is just to be extra safe
-    bpy.data.scenes[objName].render.image_settings.color_mode = "RGB"
+    if mode == "SS":
+        # For SiloamSee renders
+        bpy.data.scenes[objName].render.image_settings.color_mode = "BW"
+        bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "I"])
+        bpy.data.scenes[objName].render.image_settings.color_mode = "RGB"
+    elif mode == "SL":
+        # For SiloamLearn (trimble model) renders
+        bpy.data.scenes[sceneName].render.image_settings.color_mode = "BW"
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*[daeRenderPath, c.name.split(".")[0], "I"])
+        bpy.data.scenes[sceneName].render.image_settings.color_mode = "RGB"
+        
+    bpy.ops.render.render(write_still=True)
+    
+    
+    
     
 # Below is very similar to renderDepthMap
 
@@ -267,7 +277,7 @@ def renderNormals(c, mode, folder):
         bpy.data.scenes[objName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee", folder, c.name.split(".")[0], "N"])
     elif mode == "SL":
         # For SiloamLearn (trimble model) renders
-        bpy.data.scenes[sceneName].render.filepath = os.path.join(*["/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn", folder + "-train", c.name.split(".")[0], "N"])
+        bpy.data.scenes[sceneName].render.filepath = os.path.join(*[daeRenderPath, c.name.split(".")[0], "N"])
         
     bpy.ops.render.render(write_still=True)
         
@@ -469,6 +479,12 @@ def createDAECamerasV2(x, y, scene, context, daeModel):
     coords = []
     global daeCameraDimensions
     
+    # After importing the DAE model, our workflow is to see
+    # roughly how many cameras it will take to surround 
+    
+    x += 1
+    y += 1
+    
     daeCameraDimensions = [x, y]
     
     print(daeCameraDimensions)
@@ -585,6 +601,7 @@ def grabSketchUp():
 def renderSL():
     global daeRenderPath
     global daeCameraDimensions
+    global daeModelType
     
     if daeRenderPath == []:
         print("Please import your DAE via ImportAndRender.importDAE(<daePath>). If you already have a DAE imported, delete it and start again")
@@ -607,16 +624,16 @@ def renderSL():
         bpy.data.scenes[sceneName].render.resolution_percentage = 100
         
         # render RGB    
-        context.scene.render.filepath = os.path.join(daeRenderPath + "-train", c.name.split(".")[0], "RGB")
+        context.scene.render.filepath = os.path.join(daeRenderPath, c.name.split(".")[0], "RGB")
         bpy.ops.render.render(write_still=True)
     
         # render D
         #print("Generating depth map for: " + c.name)
-        renderDepthMap(c, "SL", daeRenderPath.split("/")[-1], daeCameraDimensions[0], daeCameraDimensions[1])
+        renderDepthMap(c, "SL", daeModelType, daeCameraDimensions[0], daeCameraDimensions[1])
         # render I
-        renderBw(c, "SL", folder)
+        renderBw(c, "SL", daeModelType)
         # render N
-        renderNormals(c, "SL", folder)
+        renderNormals(c, "SL", daeModelType)
         
     print("Done")
         
@@ -624,9 +641,9 @@ def renderSL():
 # My path for the DAE's from Trimble Warehouse:
 # "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE"
 # Test on the fancy door:
-# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/Doors/fancyDoor/model.dae"
+# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/door/fancyDoor/model.dae"
 # Test on archdoor:
-# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/Doors/ArchDoor.dae"
+# "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/door/ArchDoor.dae"
 # Don't import via the standard Blender GUI method - it does not set things up correctly for 
 # the output render path for the current DAE, as can be seen below
 
@@ -638,25 +655,30 @@ def renderSL():
 
 def importDAE(daePath):
     global daeRenderPath
+    global daeModelType
     
     tempPath = daePath
-    basePath = []
+    modelName = ""
     
     tempPath = tempPath.split("/")
     
     if tempPath[-1] == "model.dae":
         # go one up in the directory hierarchy
-        basePath = tempPath[-2]
+        modelName = tempPath[-2]
+        daeModelType = tempPath[-3]
     else: 
-        # use the basePath of tempPath (which is daePath)
-        basePath = tempPath[-1].split(".")[0]
+        # remove the extension from the model name
+        modelName = tempPath[-1].split(".")[0]
+        daeModelType = tempPath[-2]
+        
+    print(modelName)
     
-    daeRenderPath = os.path.join("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn/", basePath)
+    daeRenderPath = os.path.join("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamLearn/", daeModelType, modelName + "-train")
     
     bpy.ops.wm.collada_import(filepath=daePath)
     
 def testRenderSL():
-    importDAE("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/Doors/ArchDoor.dae")
+    importDAE("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/models/DAE/door/ArchDoor.dae")
     setupDAEEnv("V2", 0, 7, 4)
     grabSketchUp()
-    print("After tweaking the position, now run \"ImportAndRender.renderSL()\"")
+    print("After tweaking the position, now run \"Blender_ImportAndRender.renderSL()\"")
