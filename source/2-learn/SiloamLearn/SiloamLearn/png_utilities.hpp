@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <png.h>
+#include <unordered_map>
 
 // The width/height here are essentially arbitrary,
 // but 400x400 is enough that I can pick out details
@@ -30,13 +31,30 @@
 
 const int kPngWidth = 400;
 const int kPngHeight = 400;
-
-enum PngOperation {kPointCloud, kSobelX, kSobelY, kSobelMagnitude};
+const int kNormalYStart = 400;
+const int kNormalYEnd = 320;
+enum PngOperation {kPointCloud, kSegment, kSobelX, kSobelY, kSobelMagnitude};
 
 struct SimpleVoxel {
     int x;
     int y;
     int z;
+};
+
+struct RgbValue {
+    int r;
+    int g;
+    int b;
+    
+    bool operator==(const RgbValue &other) const {
+        return (r == other.r && g == other.g &&
+                b == other.b);
+    }
+};
+
+struct Coordinate {
+    int x;
+    int y;
 };
 
 typedef SimpleVoxel PointCloud[kPngHeight][kPngWidth];
@@ -48,5 +66,25 @@ void write_png_file(const char *filename);
 bool dead_png();
 
 PointCloud* process_png_file(PngOperation operation);
+
+// Custom but simple hash function for the normals hash table
+
+namespace std {
+    
+    template<>
+    struct hash<RgbValue> {
+        std::size_t operator()(const RgbValue& rgb_value) const {
+            using std::size_t;
+            using std::hash;
+            
+            // Compute the hash values of each of the r, g and b
+            // values, XOR and bit shift them together
+            
+            return ((hash<int>()(rgb_value.r)
+                    ^ (hash<int>()(rgb_value.g) << 1)) >> 1)
+                    ^ (hash<int>()(rgb_value.b) << 1);
+        }
+    };
+}
 
 #endif /* png_utilities_hpp */

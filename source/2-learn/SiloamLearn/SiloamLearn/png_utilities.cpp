@@ -138,9 +138,9 @@ PointCloud* process_png_file(PngOperation operation) {
         case kPointCloud: {
             PointCloud* temp_point_cloud = new PointCloud[kPngHeight];
             
-                for(int y = 0; y < height; y++) {
+                for (int y = 0; y < height; y++) {
                     png_bytep row = row_pointers[y];
-                    for(int x = 0; x < width; x++) {
+                    for (int x = 0; x < width; x++) {
                         png_bytep px = &(row[x * 4]);
                         
                         if (px[0] != 0) {
@@ -157,6 +157,60 @@ PointCloud* process_png_file(PngOperation operation) {
                     }
                 }
             return temp_point_cloud;
+            break;
+        }
+        case kSegment: {
+            // Remove the floor plane from the image using estimates
+            // from the N images to leave behind only objects of interest
+            //
+            // Only objects that are above a certain footprint size are
+            // considered for classification to help combat noisy data
+            // and parts of the images that have been removed because their
+            // normals are similar to the detected floor plane
+            //
+            // A hash table is used because of it's potentially fast
+            // lookup complexity O(1)
+            
+            std::unordered_map<RgbValue, Coordinate> normal_values;
+            
+            for (int y = kNormalYStart - 1; y >= kNormalYEnd - 1; y--) {
+                png_bytep row = row_pointers[y];
+                for (int x = 0; x < width; x++) {
+                    png_bytep px = &(row[x * 4]);
+                    
+                    // Collect the rgb representations of the normals
+                    normal_values.insert( { {px[0], px[1], px[2]}, {x, y} } );
+                    
+                    // Remove the portion of the image we have just scanned
+                    // (it is assumed to be the floor)
+                    px[0] = 0;
+                    px[1] = 0;
+                    px[2] = 0;
+                    
+                    //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+                }
+            }
+            
+            // Now iterate through the rest of the image and if the current rgb
+            // representation of the normal
+            
+            for (int y = 0; y < kNormalYEnd - 1; y++) {
+                png_bytep row = row_pointers[y];
+                for (int x = 0; x < width; x++) {
+                    png_bytep px = &(row[x * 4]);
+                    
+                    auto search = normal_values.find( {px[0], px[1], px[2]} );
+                    if (search != normal_values.end()) {
+                        // We have found a pixel which is in the range of normal values
+                        // so make it all black RGB(0, 0, 0)
+                        px[0] = 0;
+                        px[1] = 0;
+                        px[2] = 0;
+                    }
+                    
+                }
+            }
+            
             break;
         }
         case kSobelX: {
@@ -180,16 +234,16 @@ PointCloud* process_png_file(PngOperation operation) {
 // because of the floor region
 
 bool dead_png() {
-    for(int y = height - 1; y >= 0; y--) {
+    for (int y = height - 1; y >= 0; y--) {
         png_bytep row = row_pointers[y];
-        for(int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
             png_bytep px = &(row[x * 4]);
             // Check if any pixels are non-black
             
             // Definitely not the most efficient way
             // to do it, but there we are
             
-            if(px[0] != 0 || px[1] != 0 || px[2] != 0) {
+            if (px[0] != 0 || px[1] != 0 || px[2] != 0) {
                 return false;
             }
         }

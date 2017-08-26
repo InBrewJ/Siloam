@@ -38,6 +38,8 @@ public:
     
     void GeneratePointClouds();
     
+    void Segment();
+    
     void PrintRgbPaths();
     
 private:

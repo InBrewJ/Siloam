@@ -28,7 +28,8 @@ int main(int argc, const char * argv[]) {
     image_processor.GetDataset();
     //image_processor.PrintPngInfo();
     //image_processor.PrintRgbPaths();
-    image_processor.GeneratePointClouds();
+    //image_processor.GeneratePointClouds();
+    image_processor.Segment();
     
     
     return 0;
