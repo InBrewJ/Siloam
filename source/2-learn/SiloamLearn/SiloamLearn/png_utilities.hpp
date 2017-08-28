@@ -21,8 +21,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
 #include <png.h>
 #include <unordered_map>
+#include <vector>
 
 // The width/height here are essentially arbitrary,
 // but 400x400 is enough that I can pick out details
@@ -31,9 +33,15 @@
 
 const int kPngWidth = 400;
 const int kPngHeight = 400;
-const int kNormalYStart = 400;
-const int kNormalYEnd = 320;
-enum PngOperation {kPointCloud, kSegment, kSobelX, kSobelY, kSobelMagnitude};
+const int kNormalYStart = 300;
+const int kNormalYEnd = 400;
+enum PngOperation {kPointCloud,
+                   kFindFloor,
+                   kSegment,
+                   kCluster,
+                   kSobelX,
+                   kSobelY,
+                   kSobelMagnitude};
 
 struct SimpleVoxel {
     int x;
@@ -59,15 +67,22 @@ struct Coordinate {
 
 typedef SimpleVoxel PointCloud[kPngHeight][kPngWidth];
 
+struct PngProcessResultData {
+    PointCloud* point_cloud;
+    std::vector<Coordinate>* floor_estimate;
+};
+
 void read_png_file(const char *filename);
 
 void write_png_file(const char *filename);
 
 bool dead_png();
 
-PointCloud* process_png_file(PngOperation operation);
+void process_png_file(PngOperation operation, PngProcessResultData& result_data);
 
 // Custom but simple hash function for the normals hash table
+// It doesn't particularly matter if there are hash collisions
+// because we only want to store unique values anyway
 
 namespace std {
     

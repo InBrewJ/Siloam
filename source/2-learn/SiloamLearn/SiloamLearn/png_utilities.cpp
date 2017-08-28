@@ -74,13 +74,6 @@ void read_png_file(const char *filename) {
     png_read_image(png, row_pointers);
     
     fclose(fp);
-    
-    // Clean up
-    
-    png_destroy_read_struct(&png, &info, NULL);
-    png = NULL;
-    info = NULL;
-    free(row_pointers);
 }
 
 void write_png_file(const char *filename) {
@@ -115,6 +108,10 @@ void write_png_file(const char *filename) {
     // Use png_set_filler().
     //png_set_filler(png, 0, PNG_FILLER_AFTER);
     
+    if (row_pointers == NULL) {
+        printf("Why is row_pointers NULL? Sort it!");
+    }
+    
     png_write_image(png, row_pointers);
     png_write_end(png, NULL);
     
@@ -132,7 +129,11 @@ void write_png_file(const char *filename) {
 // This needs to generate the point cloud, and all sobel
 // operations
 
-PointCloud* process_png_file(PngOperation operation) {
+void process_png_file(PngOperation operation, PngProcessResultData& result_data) {
+    
+    // init all the pointers in result_data to NULL
+    result_data.point_cloud = NULL;
+    result_data.floor_estimate = NULL;
     
     switch(operation) {
         case kPointCloud: {
@@ -156,10 +157,11 @@ PointCloud* process_png_file(PngOperation operation) {
                         //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
                     }
                 }
-            return temp_point_cloud;
+            
+            result_data.point_cloud = temp_point_cloud;
             break;
         }
-        case kSegment: {
+        case kFindFloor: {
             // Remove the floor plane from the image using estimates
             // from the N images to leave behind only objects of interest
             //
@@ -169,47 +171,88 @@ PointCloud* process_png_file(PngOperation operation) {
             // normals are similar to the detected floor plane
             //
             // A hash table is used because of it's potentially fast
-            // lookup complexity O(1)
+            // lookup complexity O(1). Given that we must analyse potentially
+            // 1000's of images this is important
             
             std::unordered_map<RgbValue, Coordinate> normal_values;
+            result_data.floor_estimate = new std::vector<Coordinate>;
             
-            for (int y = kNormalYStart - 1; y >= kNormalYEnd - 1; y--) {
+            for (int y = kNormalYStart - 1; y < kNormalYEnd; y++) {
                 png_bytep row = row_pointers[y];
                 for (int x = 0; x < width; x++) {
                     png_bytep px = &(row[x * 4]);
                     
-                    // Collect the rgb representations of the normals
-                    normal_values.insert( { {px[0], px[1], px[2]}, {x, y} } );
+                    printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
                     
-                    // Remove the portion of the image we have just scanned
-                    // (it is assumed to be the floor)
-                    px[0] = 0;
-                    px[1] = 0;
-                    px[2] = 0;
-                    
-                    //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+                    // Collect the rgb representations of the normals unless the pixel is black
+                    if ( !(px[0] == 0 && px[1] == 0 && px[2] == 0) ) {
+                        normal_values.insert( { {px[0], px[1], px[2]} , {x, y} } );
+                        
+                        // Blacken the pixel we have just scanned
+                        // (it is assumed to be the floor)
+                        px[0] = 0;
+                        px[1] = 0;
+                        px[2] = 0;
+                        
+                        // Save the floor pixels to the floor_estimate vector
+                        result_data.floor_estimate->push_back( {x, y} );
+                    }
                 }
             }
             
             // Now iterate through the rest of the image and if the current rgb
-            // representation of the normal
+            // representation of the normal is in the normal hash table, once
+            // again blacken the pixel
             
-            for (int y = 0; y < kNormalYEnd - 1; y++) {
+            for (int y = 0; y < kNormalYStart - 1; y++) {
                 png_bytep row = row_pointers[y];
                 for (int x = 0; x < width; x++) {
                     png_bytep px = &(row[x * 4]);
-                    
-                    auto search = normal_values.find( {px[0], px[1], px[2]} );
-                    if (search != normal_values.end()) {
-                        // We have found a pixel which is in the range of normal values
-                        // so make it all black RGB(0, 0, 0)
-                        px[0] = 0;
-                        px[1] = 0;
-                        px[2] = 0;
+                    if ( !(px[0] == 0 && px[1] == 0 && px[2] == 0) ) {
+                        auto search = normal_values.find( {px[0], px[1], px[2]} );
+                        if (search != normal_values.end()) {
+                            // We have found a pixel which is in the range of normal values
+                            // so make it all black RGB(0, 0, 0)
+                            px[0] = 0;
+                            px[1] = 0;
+                            px[2] = 0;
+                            
+                            // Save the floor pixels to the floor_estimate vector
+                            result_data.floor_estimate->push_back( {x, y} );
+                        }
                     }
-                    
                 }
             }
+            break;
+        }
+        case kSegment: {
+            // Remove the floor from a given image using the floor estimation
+            // found in the kFindFloor step
+            
+//            for (auto const& coord: *result_data.floor_estimate) {
+//                    printf("Floor coord at x: %d y: %d\n", coord.x, coord.y);
+//            }
+//            
+//            for (auto const& coord: *result_data.floor_estimate) {
+//                png_bytep row = row_pointers[coord.y];
+//                png_bytep px = &(row[coord.x * 4]);
+//                
+//                px[0] = 0;
+//                px[1] = 0;
+//                px[2] = 0;
+//            }
+            
+            
+            break;
+        }
+        case kCluster: {
+            // Find clusters via the method in Fehr et al - simple
+            // Euclidean distance (see page 89 of the paper)
+            //
+            // Clusters below are certain threshold are removed from
+            // the image - they are effectively considered as noise since
+            // it is likely they are part of the floor plane or extraneous
+            // objects not relevant to any of the four categories under test
             
             break;
         }
@@ -226,7 +269,6 @@ PointCloud* process_png_file(PngOperation operation) {
             break;
         }
     }
-    return nullptr;
 }
 
 // Start from the bottom left of the PNG and traverse upwards.
