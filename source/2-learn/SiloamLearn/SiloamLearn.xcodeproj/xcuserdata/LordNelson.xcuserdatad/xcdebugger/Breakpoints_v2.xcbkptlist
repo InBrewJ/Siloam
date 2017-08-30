@@ -19,5 +19,85 @@
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/image_processor.cpp"
+            timestampString = "525634474.441995"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "ImageProcessor::Segment()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/png_utilities.cpp"
+            timestampString = "525759919.093881"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
+            landmarkName = "process_png_file(PngOperation operation, PngProcessResultData&amp; result_data)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "process_png_file(PngOperation, PngProcessResultData&amp;)"
+                  moduleName = "SiloamLearn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/SiloamLearn/SiloamLearn/png_utilities.cpp"
+                  timestampString = "525634899.762439"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "228"
+                  endingLineNumber = "228"
+                  offsetFromSymbolStart = "8905">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "process_png_file(PngOperation, PngProcessResultData&amp;)"
+                  moduleName = "SiloamLearn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/SiloamLearn/SiloamLearn/png_utilities.cpp"
+                  timestampString = "525634899.764513"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "228"
+                  endingLineNumber = "228"
+                  offsetFromSymbolStart = "9326">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/png_utilities.cpp"
+            timestampString = "525759919.093881"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "find_clusters(double threshold)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

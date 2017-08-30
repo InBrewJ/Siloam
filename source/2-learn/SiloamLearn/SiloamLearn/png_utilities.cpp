@@ -126,14 +126,85 @@ void write_png_file(const char *filename) {
     fclose(fp);
 }
 
+// Finds clusters in the initial D_seg image since there
+// could be artifacts of the background in the
+
+void find_clusters(double threshold) {
+
+    
+    // Using a map here and hoping LLVM optimises
+    // insertion and finding because it will already be
+    // sorted in numerical ascending order...
+    
+    std::map<int, std::vector<double>> euclidean_distances;
+    std::vector<std::vector<Coordinate>> clusters;
+    double this_distance = 0.0f;
+    int num_clusters = 0; // is set to clusters.size() later on
+    png_bytep row = NULL;
+    png_bytep px = NULL;
+    png_bytep row_ = NULL;
+    png_bytep px_ = NULL;
+    
+
+    for (int y = 0; y < height; y++) {
+        row = row_pointers[y];
+        for (int x = 0; x < width; x++) {
+            px = &(row[x * 4]);
+            
+            // Only check non black pixels
+            
+            if ( !(px[0] == 0 && px[1] == 0 && px[2] == 0) ) {
+                
+                // And find the euclidean distance of this non black pixel
+                // from all the other non-black pixels
+                //
+                // Maybe the most naive alogorithm ever written
+                // At least it's thorough
+                
+                for (int y_ = 0; y_ < height; y_++) {
+                    row_ = row_pointers[y_];
+                    for (int x_ = 0; x_ < width; x_++) {
+                    px_ = &(row_[x_ * 4]);
+                    
+                        if ( !(px_[0] == 0 && px_[1] == 0 && px_[2] == 0) ) {
+                            // Simple pythagoras for (x,y) and (x_,y_)
+                            
+                            this_distance = sqrt( pow(x - x_, 2)
+                                                 + pow(y - y_, 2) );
+                            
+                            // Remember this y+1 factor! It's very important
+                            // later on. Without y+1 the first row of pixel
+                            // distances would all have the key '0'
+                            
+                            euclidean_distances[int((y+1)*x)].push_back(this_distance);
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Iterate through euclidean_distances and find all points that are within
+    // distance kEuclideanClusterSizeThreshold (see .hpp file). If they are, create
+    // a new cluster or add to the same cluster. If not, of course don't add them to
+    // the cluster!
+    
+    for (std::map<int, std::vector<double>>::iterator it = euclidean_distances.begin();
+         it != euclidean_distances.end();
+         ++it) {
+        it->first;
+        it->second;
+    }
+    
+    
+    
+}
+
 // This needs to generate the point cloud, and all sobel
 // operations
 
 void process_png_file(PngOperation operation, PngProcessResultData& result_data) {
-    
-    // init all the pointers in result_data to NULL
-    result_data.point_cloud = NULL;
-    result_data.floor_estimate = NULL;
     
     switch(operation) {
         case kPointCloud: {
@@ -229,19 +300,20 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
             // Remove the floor from a given image using the floor estimation
             // found in the kFindFloor step
             
-//            for (auto const& coord: *result_data.floor_estimate) {
-//                    printf("Floor coord at x: %d y: %d\n", coord.x, coord.y);
-//            }
-//            
-//            for (auto const& coord: *result_data.floor_estimate) {
-//                png_bytep row = row_pointers[coord.y];
-//                png_bytep px = &(row[coord.x * 4]);
-//                
-//                px[0] = 0;
-//                px[1] = 0;
-//                px[2] = 0;
-//            }
+            for (auto const& coord: *result_data.floor_estimate) {
+                png_bytep row = row_pointers[coord.y];
+                png_bytep px = &(row[coord.x * 4]);
+                
+                px[0] = 0;
+                px[1] = 0;
+                px[2] = 0;
+            }
             
+            // Using the same method as in kCluster, find clusters
+            // below a certain threshold and blacken them - they are
+            // assumed to be part of the floor plane
+            
+            find_clusters(kSmallClusterThreshold);
             
             break;
         }

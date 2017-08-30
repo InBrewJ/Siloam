@@ -21,9 +21,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <iostream>
 #include <png.h>
 #include <unordered_map>
+#include <map>
 #include <vector>
 
 // The width/height here are essentially arbitrary,
@@ -35,6 +37,9 @@ const int kPngWidth = 400;
 const int kPngHeight = 400;
 const int kNormalYStart = 300;
 const int kNormalYEnd = 400;
+const double kSmallClusterThreshold = 50;
+const double kEuclideanClusterSizeThreshold = 5.0;
+
 enum PngOperation {kPointCloud,
                    kFindFloor,
                    kSegment,
@@ -77,6 +82,8 @@ void read_png_file(const char *filename);
 void write_png_file(const char *filename);
 
 bool dead_png();
+
+void find_clusters(int threshold);
 
 void process_png_file(PngOperation operation, PngProcessResultData& result_data);
 
