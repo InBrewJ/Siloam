@@ -27,6 +27,7 @@
 #include <unordered_map>
 #include <map>
 #include <vector>
+#include <list>
 
 // The width/height here are essentially arbitrary,
 // but 400x400 is enough that I can pick out details
@@ -38,7 +39,7 @@ const int kPngHeight = 400;
 const int kNormalYStart = 300;
 const int kNormalYEnd = 400;
 const double kSmallClusterThreshold = 50;
-const double kEuclideanClusterSizeThreshold = 5.0;
+const double kEuclideanClusterRadiusThreshold = 3.0;
 
 enum PngOperation {kPointCloud,
                    kFindFloor,
@@ -68,6 +69,12 @@ struct RgbValue {
 struct Coordinate {
     int x;
     int y;
+};
+
+struct ClusterCoordinate {
+    int x;
+    int y;
+    int cluster_number;
 };
 
 typedef SimpleVoxel PointCloud[kPngHeight][kPngWidth];

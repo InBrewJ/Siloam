@@ -131,20 +131,24 @@ void write_png_file(const char *filename) {
 
 void find_clusters(double threshold) {
 
-    
     // Using a map here and hoping LLVM optimises
     // insertion and finding because it will already be
     // sorted in numerical ascending order...
     
     std::map<int, std::vector<double>> euclidean_distances;
-    std::vector<std::vector<Coordinate>> clusters;
+    std::vector<std::vector<ClusterCoordinate>>
+        clusters(400, std::vector<ClusterCoordinate>(kPngHeight*kPngWidth)); // we shouldn't need more
+                                                                             // than 400 clusters
     double this_distance = 0.0f;
     int num_clusters = 0; // is set to clusters.size() later on
+    int cluster_index = 0;
+    int unwrapped_x = 0;
+    int unwrapped_y = 0;
+    int pixel_count = 0;
     png_bytep row = NULL;
     png_bytep px = NULL;
     png_bytep row_ = NULL;
     png_bytep px_ = NULL;
-    
 
     for (int y = 0; y < height; y++) {
         row = row_pointers[y];
@@ -165,9 +169,15 @@ void find_clusters(double threshold) {
                     row_ = row_pointers[y_];
                     for (int x_ = 0; x_ < width; x_++) {
                     px_ = &(row_[x_ * 4]);
+                        
+                        // Remember to always do the non black pixel check!
+                        // they are arranged in this order in each vector of
+                        // euclidean distances
                     
                         if ( !(px_[0] == 0 && px_[1] == 0 && px_[2] == 0) ) {
                             // Simple pythagoras for (x,y) and (x_,y_)
+                            
+                            // TODO: sqrt must be expensive
                             
                             this_distance = sqrt( pow(x - x_, 2)
                                                  + pow(y - y_, 2) );
@@ -176,33 +186,55 @@ void find_clusters(double threshold) {
                             // later on. Without y+1 the first row of pixel
                             // distances would all have the key '0'
                             
-                            euclidean_distances[int((y+1)*x)].push_back(this_distance);
+                            // TODO: and push_back must be expensive? Apparently O(n)
+                            // because of copying arrays and such
+                            
+                            euclidean_distances[pixel_count].push_back(this_distance);
                             
                         }
                     }
                 }
             }
+        ++pixel_count;
         }
     }
     
     // Iterate through euclidean_distances and find all points that are within
-    // distance kEuclideanClusterSizeThreshold (see .hpp file). If they are, create
-    // a new cluster or add to the same cluster. If not, of course don't add them to
-    // the cluster!
+    // distance kEuclideanClusterRadiusThreshold (see .hpp file). If they are, create
+    // a new cluster or add to the same cluster
     
     for (std::map<int, std::vector<double>>::iterator it = euclidean_distances.begin();
          it != euclidean_distances.end();
          ++it) {
-        it->first;
-        it->second;
+        
+        // it->first here refers to the pixel currently being processed
+        
+        for (auto const& distance: it->second) {
+            if (distance <= kEuclideanClusterRadiusThreshold) {
+                
+                std::cout << "Pixel: " << it->first << std::endl;
+                std::cout << "Euc distance: " << distance << std::endl;
+                
+                // Get the x and y coordinates from the 1D pixel_count index:
+                
+                unwrapped_y = int(it->first / kPngWidth);
+                unwrapped_x = int(it->first % kPngWidth);
+                
+                // Allegedly this is faster than push_back and needs
+                // no reallocation
+                
+                clusters[cluster_index].push_back( {unwrapped_x, unwrapped_y, cluster_index} );
+            }
+        }
+        ++cluster_index;
     }
-    
-    
-    
 }
 
 // This needs to generate the point cloud, and all sobel
 // operations
+//
+// Definitely an opportunity for multi-threading here -
+// each image could be processed on a separate thread
 
 void process_png_file(PngOperation operation, PngProcessResultData& result_data) {
     

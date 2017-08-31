@@ -195,7 +195,6 @@ void ImageProcessor::Segment() {
     // all images apart from N.png, since this has already been
     // processed
     
-    std::vector<std::string> current_process_set;
     std::string output_path;
     std::string final_filename;
     
