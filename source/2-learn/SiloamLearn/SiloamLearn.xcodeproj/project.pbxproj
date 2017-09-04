@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A1C3F301F5D4E81000C3870 /* dbscan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A1C3F2F1F5D4E81000C3870 /* dbscan.cpp */; };
+		2A1C3F321F5D4E96000C3870 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A1C3F311F5D4E96000C3870 /* utils.cpp */; };
+		2A1C3F341F5D4EC1000C3870 /* cluster_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A1C3F331F5D4EC1000C3870 /* cluster_data.cpp */; };
 		2A7A8C381F3D875C005B7A21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C371F3D875C005B7A21 /* main.cpp */; };
 		2A7A8C401F3F697F005B7A21 /* feature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C3E1F3F697F005B7A21 /* feature.cpp */; };
 		2A7A8C431F3F699A005B7A21 /* rbf_svm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C411F3F699A005B7A21 /* rbf_svm.cpp */; };
@@ -32,6 +35,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2A1C3F2D1F5D4047000C3870 /* pyclustering */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pyclustering; path = ../../pyclustering; sourceTree = "<group>"; };
+		2A1C3F2F1F5D4E81000C3870 /* dbscan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbscan.cpp; path = ../pyclustering/cluster/dbscan.cpp; sourceTree = "<group>"; };
+		2A1C3F311F5D4E96000C3870 /* utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = ../pyclustering/utils.cpp; sourceTree = "<group>"; };
+		2A1C3F331F5D4EC1000C3870 /* cluster_data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cluster_data.cpp; path = ../pyclustering/cluster/cluster_data.cpp; sourceTree = "<group>"; };
 		2A7A8C341F3D875C005B7A21 /* SiloamLearn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SiloamLearn; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A7A8C371F3D875C005B7A21 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2A7A8C3E1F3F697F005B7A21 /* feature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = feature.cpp; sourceTree = "<group>"; };
@@ -68,6 +75,9 @@
 		2A7A8C2B1F3D875B005B7A21 = {
 			isa = PBXGroup;
 			children = (
+				2A1C3F331F5D4EC1000C3870 /* cluster_data.cpp */,
+				2A1C3F311F5D4E96000C3870 /* utils.cpp */,
+				2A1C3F2F1F5D4E81000C3870 /* dbscan.cpp */,
 				2A7A8C501F3FCAD8005B7A21 /* libboost_regex.dylib */,
 				2A7A8C521F3FCAE7005B7A21 /* libboost_filesystem.dylib */,
 				2AAFD1AA1F43C4CB00E92D7D /* libpng16.dylib */,
@@ -87,6 +97,7 @@
 		2A7A8C361F3D875C005B7A21 /* SiloamLearn */ = {
 			isa = PBXGroup;
 			children = (
+				2A1C3F2D1F5D4047000C3870 /* pyclustering */,
 				2A7A8C4D1F3F82BC005B7A21 /* svm.cpp */,
 				2A7A8C4E1F3F82BC005B7A21 /* svm.h */,
 				2A7A8C371F3D875C005B7A21 /* main.cpp */,
@@ -161,6 +172,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A1C3F341F5D4EC1000C3870 /* cluster_data.cpp in Sources */,
+				2A1C3F321F5D4E96000C3870 /* utils.cpp in Sources */,
+				2A1C3F301F5D4E81000C3870 /* dbscan.cpp in Sources */,
 				2A7A8C4F1F3F82BC005B7A21 /* svm.cpp in Sources */,
 				2A7A8C431F3F699A005B7A21 /* rbf_svm.cpp in Sources */,
 				2A7A8C401F3F697F005B7A21 /* feature.cpp in Sources */,
@@ -266,9 +280,11 @@
 		2A7A8C3C1F3D875C005B7A21 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					/usr/local/Cellar/boost/1.64.0_1/include,
 					/usr/local/Cellar/libpng/1.6.31/include,
+					"/Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/pyclustering/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -290,9 +306,16 @@
 		2A7A8C3D1F3D875C005B7A21 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/boost/1.64.0_1/include,
 					/usr/local/Cellar/libpng/1.6.31/include,
+					"/Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/pyclustering",
+				);
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					/usr/local/Cellar/boost/1.64.0_1/include,
+					/usr/local/Cellar/libpng/1.6.31/include,
+					"/Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/pyclustering/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

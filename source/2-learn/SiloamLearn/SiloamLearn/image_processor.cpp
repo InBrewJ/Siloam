@@ -159,7 +159,7 @@ void ImageProcessor::Segment() {
     
     read_png_file(path0.c_str());
     
-    process_png_file(kFindFloor, results);
+    process_png_file(kFindFloorNormals, results);
     write_png_file("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox/test.png");
     
     printf("floor_estimate front: %d, %d\n", results.floor_estimate->front().x,

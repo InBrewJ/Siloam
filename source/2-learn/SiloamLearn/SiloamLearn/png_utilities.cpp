@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include "png_utilities.hpp"
+#include "cluster/dbscan.hpp"
 
 int width, height;
 png_byte color_type;
@@ -129,105 +130,70 @@ void write_png_file(const char *filename) {
 // Finds clusters in the initial D_seg image since there
 // could be artifacts of the background in the
 
-void find_clusters(double threshold) {
+void find_clusters(int normal_noise_threshold, PngProcessResultData& result_data) {
 
-    // Using a map here and hoping LLVM optimises
-    // insertion and finding because it will already be
-    // sorted in numerical ascending order...
-    
-    std::map<int, std::vector<double>> euclidean_distances;
-    std::vector<std::vector<ClusterCoordinate>>
-        clusters(400, std::vector<ClusterCoordinate>(kPngHeight*kPngWidth)); // we shouldn't need more
-                                                                             // than 400 clusters
-    double this_distance = 0.0f;
-    int num_clusters = 0; // is set to clusters.size() later on
-    int cluster_index = 0;
-    int unwrapped_x = 0;
-    int unwrapped_y = 0;
-    int pixel_count = 0;
     png_bytep row = NULL;
     png_bytep px = NULL;
-    png_bytep row_ = NULL;
-    png_bytep px_ = NULL;
+    dataset cluster_dataset;
+    cluster_analysis::dbscan cluster_finder(1.0f, 1.0f);
+    cluster_analysis::dbscan_data clustering_results;
+    cluster_analysis::cluster_sequence_ptr clusters_ptr;
+    cluster_analysis::noise_ptr noise_ptr;
 
+    // Below is an attempt at DBSCAN
+    
+    // Create a dataset of non-black points (std::vectors)
+    
     for (int y = 0; y < height; y++) {
         row = row_pointers[y];
         for (int x = 0; x < width; x++) {
             px = &(row[x * 4]);
             
-            // Only check non black pixels
-            
             if ( !(px[0] == 0 && px[1] == 0 && px[2] == 0) ) {
-                
-                // And find the euclidean distance of this non black pixel
-                // from all the other non-black pixels
-                //
-                // Maybe the most naive alogorithm ever written
-                // At least it's thorough
-                
-                for (int y_ = 0; y_ < height; y_++) {
-                    row_ = row_pointers[y_];
-                    for (int x_ = 0; x_ < width; x_++) {
-                    px_ = &(row_[x_ * 4]);
-                        
-                        // Remember to always do the non black pixel check!
-                        // they are arranged in this order in each vector of
-                        // euclidean distances
-                    
-                        if ( !(px_[0] == 0 && px_[1] == 0 && px_[2] == 0) ) {
-                            // Simple pythagoras for (x,y) and (x_,y_)
-                            
-                            // TODO: sqrt must be expensive
-                            
-                            this_distance = sqrt( pow(x - x_, 2)
-                                                 + pow(y - y_, 2) );
-                            
-                            // Remember this y+1 factor! It's very important
-                            // later on. Without y+1 the first row of pixel
-                            // distances would all have the key '0'
-                            
-                            // TODO: and push_back must be expensive? Apparently O(n)
-                            // because of copying arrays and such
-                            
-                            euclidean_distances[pixel_count].push_back(this_distance);
-                            
-                        }
-                    }
-                }
+                cluster_dataset.push_back( {double(x), double(y)} );
             }
-        ++pixel_count;
         }
     }
     
-    // Iterate through euclidean_distances and find all points that are within
-    // distance kEuclideanClusterRadiusThreshold (see .hpp file). If they are, create
-    // a new cluster or add to the same cluster
+    cluster_finder.process(cluster_dataset, clustering_results);
     
-    for (std::map<int, std::vector<double>>::iterator it = euclidean_distances.begin();
-         it != euclidean_distances.end();
-         ++it) {
+    std::cout << "Number of clusters: " << clustering_results.size() << std::endl;
+    
+    clusters_ptr = clustering_results.clusters();
+    noise_ptr = clustering_results.noise();
+    
+    for (auto i = clusters_ptr->begin(); i != clusters_ptr->end(); i++) {
         
-        // it->first here refers to the pixel currently being processed
-        
-        for (auto const& distance: it->second) {
-            if (distance <= kEuclideanClusterRadiusThreshold) {
+        if (i->size() < normal_noise_threshold) {
+            std::cout << "Removing cluster of size: " << i->size() << std::endl;
+            std::cout << "Members: \n";
+            for (auto j = i->begin(); j != i->end(); j++) {
+                std::cout << "\t x: " << cluster_dataset[*j].front()
+                            << " y: " << cluster_dataset[*j].back() << std::endl;
                 
-                std::cout << "Pixel: " << it->first << std::endl;
-                std::cout << "Euc distance: " << distance << std::endl;
-                
-                // Get the x and y coordinates from the 1D pixel_count index:
-                
-                unwrapped_y = int(it->first / kPngWidth);
-                unwrapped_x = int(it->first % kPngWidth);
-                
-                // Allegedly this is faster than push_back and needs
-                // no reallocation
-                
-                clusters[cluster_index].push_back( {unwrapped_x, unwrapped_y, cluster_index} );
+                result_data.floor_estimate->push_back(
+                                                      {
+                                                      int(cluster_dataset[*j].front()),
+                                                      int(cluster_dataset[*j].back())
+                                                      }
+                                                      );
             }
         }
-        ++cluster_index;
     }
+    
+    // We don't want any of the noise pixels either, so add those to floor_estimate
+    
+    for (auto i = noise_ptr->begin(); i != noise_ptr->end(); i++) {
+        result_data.floor_estimate->push_back(
+                                              {
+                                              int(cluster_dataset[*i].front()),
+                                              int(cluster_dataset[*i].back())
+                                              }
+                                              );
+    }
+    
+    
+    std::cout << "Segmentation done!" << std::endl;
 }
 
 // This needs to generate the point cloud, and all sobel
@@ -264,7 +230,7 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
             result_data.point_cloud = temp_point_cloud;
             break;
         }
-        case kFindFloor: {
+        case kFindFloorNormals: {
             // Remove the floor plane from the image using estimates
             // from the N images to leave behind only objects of interest
             //
@@ -276,6 +242,8 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
             // A hash table is used because of it's potentially fast
             // lookup complexity O(1). Given that we must analyse potentially
             // 1000's of images this is important
+            
+            result_data.floor_estimate = nullptr;
             
             std::unordered_map<RgbValue, Coordinate> normal_values;
             result_data.floor_estimate = new std::vector<Coordinate>;
@@ -330,7 +298,7 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
         }
         case kSegment: {
             // Remove the floor from a given image using the floor estimation
-            // found in the kFindFloor step
+            // found in the kFindFloorNormals step
             
             for (auto const& coord: *result_data.floor_estimate) {
                 png_bytep row = row_pointers[coord.y];
@@ -344,8 +312,20 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
             // Using the same method as in kCluster, find clusters
             // below a certain threshold and blacken them - they are
             // assumed to be part of the floor plane
+            // OR just use 1 or root 2 for the distance
             
-            find_clusters(kSmallClusterThreshold);
+            find_clusters(kNormalNoiseThreshold, result_data);
+            
+            // Second stage of floor removal after "noise" detection
+            
+            for (auto const& coord: *result_data.floor_estimate) {
+                png_bytep row = row_pointers[coord.y];
+                png_bytep px = &(row[coord.x * 4]);
+                
+                px[0] = 0;
+                px[1] = 0;
+                px[2] = 0;
+            }
             
             break;
         }
