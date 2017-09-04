@@ -12,12 +12,13 @@
 
 #include <stdio.h>
 #include "png_utilities.hpp"
-#include "cluster/dbscan.hpp"
 
 int width, height;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
+
+using namespace cv;
 
 void read_png_file(const char *filename) {
     FILE *fp = fopen(filename, "rb");
@@ -157,7 +158,7 @@ void find_clusters(int normal_noise_threshold, PngProcessResultData& result_data
     
     cluster_finder.process(cluster_dataset, clustering_results);
     
-    std::cout << "Number of clusters: " << clustering_results.size() << std::endl;
+    //std::cout << "Number of clusters: " << clustering_results.size() << std::endl;
     
     clusters_ptr = clustering_results.clusters();
     noise_ptr = clustering_results.noise();
@@ -165,11 +166,11 @@ void find_clusters(int normal_noise_threshold, PngProcessResultData& result_data
     for (auto i = clusters_ptr->begin(); i != clusters_ptr->end(); i++) {
         
         if (i->size() < normal_noise_threshold) {
-            std::cout << "Removing cluster of size: " << i->size() << std::endl;
-            std::cout << "Members: \n";
+            //std::cout << "Removing cluster of size: " << i->size() << std::endl;
+            //std::cout << "Members: \n";
             for (auto j = i->begin(); j != i->end(); j++) {
-                std::cout << "\t x: " << cluster_dataset[*j].front()
-                            << " y: " << cluster_dataset[*j].back() << std::endl;
+                //std::cout << "\t x: " << cluster_dataset[*j].front()
+                //            << " y: " << cluster_dataset[*j].back() << std::endl;
                 
                 result_data.floor_estimate->push_back(
                                                       {
@@ -193,7 +194,7 @@ void find_clusters(int normal_noise_threshold, PngProcessResultData& result_data
     }
     
     
-    std::cout << "Segmentation done!" << std::endl;
+    std::cout << "This round of segmentation done!" << std::endl;
 }
 
 // This needs to generate the point cloud, and all sobel
@@ -253,17 +254,16 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
                 for (int x = 0; x < width; x++) {
                     png_bytep px = &(row[x * 4]);
                     
-                    printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
-                    
                     // Collect the rgb representations of the normals unless the pixel is black
                     if ( !(px[0] == 0 && px[1] == 0 && px[2] == 0) ) {
                         normal_values.insert( { {px[0], px[1], px[2]} , {x, y} } );
                         
                         // Blacken the pixel we have just scanned
                         // (it is assumed to be the floor)
-                        px[0] = 0;
-                        px[1] = 0;
-                        px[2] = 0;
+                        // Probably don't need to do this here
+//                        px[0] = 0;
+//                        px[1] = 0;
+//                        px[2] = 0;
                         
                         // Save the floor pixels to the floor_estimate vector
                         result_data.floor_estimate->push_back( {x, y} );
@@ -282,11 +282,12 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
                     if ( !(px[0] == 0 && px[1] == 0 && px[2] == 0) ) {
                         auto search = normal_values.find( {px[0], px[1], px[2]} );
                         if (search != normal_values.end()) {
+                            // Probably don't need to do this...
                             // We have found a pixel which is in the range of normal values
                             // so make it all black RGB(0, 0, 0)
-                            px[0] = 0;
-                            px[1] = 0;
-                            px[2] = 0;
+//                            px[0] = 0;
+//                            px[1] = 0;
+//                            px[2] = 0;
                             
                             // Save the floor pixels to the floor_estimate vector
                             result_data.floor_estimate->push_back( {x, y} );
@@ -329,27 +330,32 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
             
             break;
         }
-        case kCluster: {
-            // Find clusters via the method in Fehr et al - simple
-            // Euclidean distance (see page 89 of the paper)
-            //
-            // Clusters below are certain threshold are removed from
-            // the image - they are effectively considered as noise since
-            // it is likely they are part of the floor plane or extraneous
-            // objects not relevant to any of the four categories under test
+        case kRemoveFloor: {
+            
+            for (auto const& coord: *result_data.floor_estimate) {
+                png_bytep row = row_pointers[coord.y];
+                png_bytep px = &(row[coord.x * 4]);
+                
+                px[0] = 0;
+                px[1] = 0;
+                px[2] = 0;
+            }
             
             break;
         }
-        case kSobelX: {
-            // Implement sobel in X direction
+        case kGenerateSobelX: {
+            // (using OpenCV 3.3.0)
+            
             break;
         }
-        case kSobelY: {
-            // Implement sobel in Y direction
+        case kGenerateSobelY: {
+            // (using OpenCV 3.3.0)
+            
             break;
         }
-        case kSobelMagnitude: {
-            // Find magnitude of gradient (full sobel?)
+        case kGenerateSobelGradient: {
+            // (using OpenCV 3.3.0)
+            
             break;
         }
     }

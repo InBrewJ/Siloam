@@ -6,7 +6,6 @@
  * and support all defined color_type.
  *
  * Extended for use in SiloamLearn by Jason Brewer, 2017
- * Also, there are now no globals
  *
  * Copyright 2002-2010 Guillaume Cottenceau.
  *
@@ -14,7 +13,6 @@
  * of the X11 license.
  *
  */
-
 
 #ifndef png_utilities_hpp
 #define png_utilities_hpp
@@ -28,6 +26,9 @@
 #include <map>
 #include <vector>
 #include <list>
+#include "cluster/dbscan.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
 
 // The width/height here are essentially arbitrary,
 // but 400x400 is enough that I can pick out details
@@ -38,16 +39,19 @@ const int kPngWidth = 400;
 const int kPngHeight = 400;
 const int kNormalYStart = 300;
 const int kNormalYEnd = 400;
-const int kNormalNoiseThreshold = 2000;
+const int kNormalNoiseThreshold = 2000;  // Clusters below this size are
+                                         // considered floor removal noise
 const double kEuclideanClusterRadiusThreshold = 1.0f;
 
-enum PngOperation {kPointCloud,
-                   kFindFloorNormals,
-                   kSegment,
-                   kCluster,
-                   kSobelX,
-                   kSobelY,
-                   kSobelMagnitude};
+enum PngOperation {
+                    kPointCloud,
+                    kFindFloorNormals,
+                    kSegment,
+                    kRemoveFloor,
+                    kGenerateSobelX,
+                    kGenerateSobelY,
+                    kGenerateSobelGradient,
+                   };
 
 struct SimpleVoxel {
     int x;

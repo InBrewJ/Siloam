@@ -8,6 +8,8 @@
 
 #include "image_processor.hpp"
 
+using namespace cv;
+
 ImageProcessor::ImageProcessor(std::string img_path) {
     img_path_ = img_path;
 }
@@ -133,6 +135,18 @@ void ImageProcessor::Segment() {
     // Just wall and floor planes
     std::string path2 = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards0/N.png";
     
+    // regexes used to generate segmented image output filenames
+    // Get all images in the parent directory apart from the already
+    // processes N.png. Just do a [^N] regex since there could be other
+    // images in the renders folder in the future
+    
+    boost::regex n_pattern(".*forwards.*[N]\.png");
+    boost::regex rgb_pattern(".*forwards.*[RGB]\.png");
+    boost::regex i_pattern(".*forwards.*[I]\.png");
+    boost::regex d_pattern(".*forwards.*[D]\.png");
+    std::string output_path = "";
+    std::string final_filename = "";
+    
     PngProcessResultData results;
     results.floor_estimate = new std::vector<Coordinate>;
     std::vector<std::string> normal_files;
@@ -154,66 +168,50 @@ void ImageProcessor::Segment() {
             normal_files.push_back(path);
         }
     }
-    
-    // Detect the floor from the normals images
-    
-    read_png_file(path0.c_str());
-    
-    process_png_file(kFindFloorNormals, results);
-    write_png_file("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox/test.png");
-    
-    printf("floor_estimate front: %d, %d\n", results.floor_estimate->front().x,
-                                             results.floor_estimate->front().y);
-    
-    printf("floor_estimate back: %d, %d\n", results.floor_estimate->back().x,
-                                            results.floor_estimate->back().y);
-    
-    std::cout << "floor_estimate size:  " << results.floor_estimate->size()
-              << std::endl;
-    
-//    for (auto const& coord: *results.floor_estimate) {
-//            printf("Floor coord at x: %d y: %d\n", coord.x, coord.y);
-//    }
+
     
     // Remove the floor from the RGB, I and D images too!
     
-    // Get the parent directory
-    path current_image_subset(path0);
-    std::cout << current_image_subset.parent_path() << std::endl;
+    // Remove the floor pixels based on floor_estimation
     
-    // Get all images in the parent directory apart from the already
-    // processes N.png. Just do a [^N] regex since there could be other
-    // images in the renders folder in the future
-    
-    boost::regex no_n_pattern(".*forwards.*[^N]\.png");
-    boost::regex rgb_pattern(".*forwards.*[RGB]\.png");
-    boost::regex i_pattern(".*forwards.*[I]\.png");
-    boost::regex d_pattern(".*forwards.*[D]\.png");
-    
-    
-    // Remove the floor pixels based on floor_estimation for
-    // all images apart from N.png, since this has already been
-    // processed
-    
-    std::string output_path;
-    std::string final_filename;
-    
-    // We're only looking inside one directory with no subdirectories so
-    // this recursive_directory_iterator should be pretty fast
-    
-    for (recursive_directory_iterator iter(current_image_subset.parent_path()),
-         end;
-         iter != end;
-         ++iter)
-    {
-        std::string name = iter->path().string();
-        if (regex_match(name, no_n_pattern)) {
+    for (auto const& normal_image: normal_files) {
+        
+        // Detect the floor from the normals images
+        
+        read_png_file(normal_image.c_str());
+        process_png_file(kFindFloorNormals, results);
+        path current_image_subset(normal_image);
+        
+        std::cout << "Removing floors from: "
+                    << current_image_subset.parent_path()
+                    << std::endl;
+        
+        for (recursive_directory_iterator iter(current_image_subset.parent_path()),
+             end;
+             iter != end;
+             ++iter)
+        {
+            std::string name = iter->path().string();
+            
             read_png_file(name.c_str());
-            process_png_file(kSegment, results);
+            
+            // Only find the final floor estimation
+            // based on the D image to remove odd
+            // artifacts that might be on surfaces
+            // behind objects of interest
+            
+            if (regex_match(name, d_pattern)) {
+                process_png_file(kSegment, results);
+            } else {
+                process_png_file(kRemoveFloor, results);
+
+            }
             
             // Craft the ouput path
             
-            if (regex_match(name, rgb_pattern)) {
+            if (regex_match(name, n_pattern)) {
+                final_filename = "N_seg.png";
+            } else if (regex_match(name, rgb_pattern)) {
                 final_filename = "RGB_seg.png";
             } else if (regex_match(name, i_pattern)) {
                 final_filename = "I_seg.png";
@@ -228,7 +226,104 @@ void ImageProcessor::Segment() {
             write_png_file(output_path.c_str());
             
         }
-        
     }
+}
+
+// Generates the results of the Sobel filter
+// convoluted over the segmented I and D images as follows:
+// Ix    -> output along the X axis on I
+// Iy    -> output along the Y axis on I
+// IMag  -> magnitude of the gradient of I at each point
+// Ixx   -> output along the X axis on Ix
+// Iyy   -> output along the Y axis on Iy
+// Ixy   -> output along the Y axis on Ix
+// Dx    -> output along the X axis on D
+// Dy    -> output along the Y axis on D
+// DMag  -> magnitude of the gradient of D at each point
+// Gaussian blur is first added to each image to reduce noise
+// at the edges
+
+void ImageProcessor::GenerateSobel() {
     
+    boost::regex i_pattern(".*forwards.*[I]\.png");
+    boost::regex d_pattern(".*forwards.*[D]\.png");
+    std::string output_path = "";
+    std::string final_filename = "";
+    Mat current_image;
+    Mat grad;
+    Mat grad_x, grad_y, grad_xx, grad_yy, grad_xy;
+    Mat abs_grad_x, abs_grad_y, abs_grad_xx, abs_grad_yy, abs_grad_xy;
+    int scale = 1;
+    int delta = 0;
+    int ddepth = CV_16S;
+    
+    // Concatenate all the png paths together so we can
+    // find the I and D images in one loop
+    
+    all_png_paths_ = train_png_paths_;
+    
+    all_png_paths_.insert(all_png_paths_.end(), test_png_paths_.begin()
+                                              , test_png_paths_.end()
+                          );
+    
+    all_png_paths_.insert(all_png_paths_.end(), ground_truth_png_paths_.begin()
+                                              , ground_truth_png_paths_.end()
+                          );
+    std::cout << "Size of all_png_paths_: " << all_png_paths_.size() << std::endl;
+    
+    for (auto const& path: all_png_paths_) {
+        if ( regex_match(path, i_pattern) || regex_match(path, d_pattern) ) {
+            // Generate Ix, Iy, Imag, Ixx, Iyy, Ixy
+            // Dx, Dy and DMag
+            current_image = imread(path.c_str());
+            class path current_image_subset(path);
+            
+            GaussianBlur( current_image,
+                          current_image,
+                          Size(3,3),
+                          0,
+                          0,
+                          BORDER_DEFAULT
+                         );
+            
+            // Ix or Dx
+            Sobel( current_image, grad_x, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
+            convertScaleAbs( grad_x, abs_grad_x );
+            
+            // Iy or Dy
+            Sobel( current_image, grad_y, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
+            convertScaleAbs( grad_y, abs_grad_y );
+            
+            // Imag or Dmag (approximation)
+            addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
+            
+            // Write I or D files
+            //imwrite( "path", grad_x );
+            //imwrite( "path", grad_y );
+            //imwrite( "path", grad);
+            
+            
+            if ( regex_match(path, i_pattern) ) {
+            
+                // Ixx
+                
+                Sobel( grad_x, grad_xx, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
+                convertScaleAbs( grad_x, abs_grad_x );
+                
+                // Iyy
+                
+                Sobel( grad_y, grad_yy, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
+                convertScaleAbs( grad_x, abs_grad_x );
+                
+                // Ixy
+                
+                Sobel( grad_x, grad_xy, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
+                convertScaleAbs( grad_x, abs_grad_x );
+                
+                // Write I specific files HERE
+                // imwrite( "path", gray_image );
+            
+            }
+        }
+    }
 }

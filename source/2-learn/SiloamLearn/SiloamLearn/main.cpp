@@ -8,7 +8,8 @@
 //
 //  Created by Jason  Brewer on 11/08/2017.
 //  License review pending. But probably released under something
-//  to do with BSD/Apache. Probably Apache.
+//  to do with BSD/Apache. Probably Apache. But now probably GNU
+//  because of pyclustering
 //
 
 // sandbox directory:
@@ -25,11 +26,12 @@ int main(int argc, const char * argv[]) {
     
     ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders");
     
-    image_processor.GetDataset();
+    //image_processor.GetDataset();
     //image_processor.PrintPngInfo();
     //image_processor.PrintRgbPaths();
     //image_processor.GeneratePointClouds();
-    image_processor.Segment();
+    //image_processor.Segment();
+    image_processor.GenerateSobel();
     
     
     return 0;
