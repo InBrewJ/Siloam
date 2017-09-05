@@ -22,16 +22,14 @@
 
 int main(int argc, const char * argv[]) {
     
-    // The path below will of course be defined on the command line in the future
+    // The path below will be defined as a command line argument in the future
     
     ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders");
     
-    //image_processor.GetDataset();
-    //image_processor.PrintPngInfo();
-    //image_processor.PrintRgbPaths();
+    image_processor.GetDataset();
     //image_processor.GeneratePointClouds();
-    //image_processor.Segment();
-    image_processor.GenerateSobel();
+    image_processor.Segment();
+    //image_processor.GenerateSobel();
     
     
     return 0;

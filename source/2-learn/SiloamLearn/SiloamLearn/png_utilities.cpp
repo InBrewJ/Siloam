@@ -13,12 +13,12 @@
 #include <stdio.h>
 #include "png_utilities.hpp"
 
+using namespace cv;
+
 int width, height;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
-
-using namespace cv;
 
 void read_png_file(const char *filename) {
     FILE *fp = fopen(filename, "rb");
@@ -141,7 +141,7 @@ void find_clusters(int normal_noise_threshold, PngProcessResultData& result_data
     cluster_analysis::cluster_sequence_ptr clusters_ptr;
     cluster_analysis::noise_ptr noise_ptr;
 
-    // Below is an attempt at DBSCAN
+    // DBSCAN
     
     // Create a dataset of non-black points (std::vectors)
     
@@ -157,9 +157,6 @@ void find_clusters(int normal_noise_threshold, PngProcessResultData& result_data
     }
     
     cluster_finder.process(cluster_dataset, clustering_results);
-    
-    //std::cout << "Number of clusters: " << clustering_results.size() << std::endl;
-    
     clusters_ptr = clustering_results.clusters();
     noise_ptr = clustering_results.noise();
     
@@ -223,8 +220,6 @@ void process_png_file(PngOperation operation, PngProcessResultData& result_data)
                             temp_point_cloud[y][x]->y = -1;
                             temp_point_cloud[y][x]->z = -1;
                         }
-                        
-                        //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
                     }
                 }
             

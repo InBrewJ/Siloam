@@ -126,15 +126,6 @@ void ImageProcessor::GeneratePointClouds() {
 
 void ImageProcessor::Segment() {
     
-    // forwards 9 for the bin
-    // forwards13 is also good for test here
-    // Door with bin central teaching hub
-    std::string path0 = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-155553-train/forwards9/N.png";
-    // Sample crossing
-    std::string path1 = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-162826-test/forwards3/N.png";
-    // Just wall and floor planes
-    std::string path2 = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders/SiloamSee/SiloamSee-170811-145932-train/forwards0/N.png";
-    
     // regexes used to generate segmented image output filenames
     // Get all images in the parent directory apart from the already
     // processes N.png. Just do a [^N] regex since there could be other
@@ -169,7 +160,6 @@ void ImageProcessor::Segment() {
         }
     }
 
-    
     // Remove the floor from the RGB, I and D images too!
     
     // Remove the floor pixels based on floor_estimation
@@ -243,7 +233,7 @@ void ImageProcessor::Segment() {
 // Gaussian blur is first added to each image to reduce noise
 // at the edges
 
-void ImageProcessor::GenerateSobel() {
+/*void ImageProcessor::GenerateSobel() {
     
     boost::regex i_pattern(".*forwards.*[I]\.png");
     boost::regex d_pattern(".*forwards.*[D]\.png");
@@ -326,4 +316,4 @@ void ImageProcessor::GenerateSobel() {
             }
         }
     }
-}
+}*/
