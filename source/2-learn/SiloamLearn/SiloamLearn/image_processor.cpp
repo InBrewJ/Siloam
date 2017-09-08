@@ -233,7 +233,7 @@ void ImageProcessor::Segment() {
 // Gaussian blur is first added to each image to reduce noise
 // at the edges
 
-/*void ImageProcessor::GenerateSobel() {
+void ImageProcessor::GenerateSobel() {
     
     boost::regex i_pattern(".*forwards.*[I]\.png");
     boost::regex d_pattern(".*forwards.*[D]\.png");
@@ -287,10 +287,18 @@ void ImageProcessor::Segment() {
             // Imag or Dmag (approximation)
             addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
             
+            std::string sandbox = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox";
+            
             // Write I or D files
-            //imwrite( "path", grad_x );
-            //imwrite( "path", grad_y );
-            //imwrite( "path", grad);
+            if ( regex_match(path, i_pattern) ) {
+                imwrite( sandbox + "/Ix.png", grad_x );
+                imwrite( sandbox + "/Iy.png", grad_y );
+                imwrite( sandbox + "/Imag.png", grad);
+            } else if ( regex_match(path, d_pattern) ) {
+                imwrite( sandbox + "/Dx.png", grad_x );
+                imwrite( sandbox + "/Dy.png", grad_y );
+                imwrite( sandbox + "/Dmag.png", grad);
+            }
             
             
             if ( regex_match(path, i_pattern) ) {
@@ -298,22 +306,23 @@ void ImageProcessor::Segment() {
                 // Ixx
                 
                 Sobel( grad_x, grad_xx, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
-                convertScaleAbs( grad_x, abs_grad_x );
+                convertScaleAbs( grad_xx, abs_grad_xx );
                 
                 // Iyy
                 
                 Sobel( grad_y, grad_yy, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
-                convertScaleAbs( grad_x, abs_grad_x );
+                convertScaleAbs( grad_yy, abs_grad_yy );
                 
                 // Ixy
                 
                 Sobel( grad_x, grad_xy, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
-                convertScaleAbs( grad_x, abs_grad_x );
+                convertScaleAbs( grad_xy, abs_grad_xy );
                 
                 // Write I specific files HERE
-                // imwrite( "path", gray_image );
-            
+                imwrite( sandbox + "/Ixx.png", grad_xx );
+                imwrite( sandbox + "/Iyy.png", grad_yy );
+                imwrite( sandbox + "/Ixy.png", grad_xy);
             }
         }
     }
-}*/
+}

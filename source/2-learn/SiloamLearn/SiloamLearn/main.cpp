@@ -28,8 +28,8 @@ int main(int argc, const char * argv[]) {
     
     image_processor.GetDataset();
     //image_processor.GeneratePointClouds();
-    image_processor.Segment();
-    //image_processor.GenerateSobel();
+    //image_processor.Segment();
+    image_processor.GenerateSobel();
     
     
     return 0;

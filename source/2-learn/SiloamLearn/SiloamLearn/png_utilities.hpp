@@ -27,8 +27,6 @@
 #include <vector>
 #include <list>
 #include "cluster/dbscan.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
 
 // The width/height here are essentially arbitrary,
 // but 400x400 is enough that I can pick out details

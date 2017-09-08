@@ -13,8 +13,6 @@
 #include <stdio.h>
 #include "png_utilities.hpp"
 
-using namespace cv;
-
 int width, height;
 png_byte color_type;
 png_byte bit_depth;
