@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SiloamLearn/image_processor.cpp"
-            timestampString = "526573966.497126"
+            timestampString = "526671920.987883"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "ImageProcessor::Segment()"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,91 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SiloamLearn/image_processor.cpp"
-            timestampString = "526573994.049107"
+            timestampString = "526671920.987883"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
-            landmarkName = "ImageProcessor::GenerateSobel()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SiloamLearn/image_processor.cpp"
-            timestampString = "526573996.929304"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "253"
-            endingLineNumber = "253"
-            landmarkName = "ImageProcessor::GenerateSobel()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SiloamLearn/image_processor.cpp"
-            timestampString = "526575954.01971"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
-            landmarkName = "ImageProcessor::GenerateSobel()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ImageProcessor::GenerateSobel()"
-                  moduleName = "SiloamLearn"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/SiloamLearn/SiloamLearn/image_processor.cpp"
-                  timestampString = "526575962.045609"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "264"
-                  endingLineNumber = "264"
-                  offsetFromSymbolStart = "2001">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ImageProcessor::GenerateSobel()"
-                  moduleName = "SiloamLearn"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/SiloamLearn/SiloamLearn/image_processor.cpp"
-                  timestampString = "526575962.047404"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "264"
-                  endingLineNumber = "264"
-                  offsetFromSymbolStart = "2415">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SiloamLearn/image_processor.cpp"
-            timestampString = "526576070.973824"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
             landmarkName = "ImageProcessor::GenerateSobel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -218,11 +138,123 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SiloamLearn/image_processor.cpp"
-            timestampString = "526576293.7752"
+            timestampString = "526671920.987883"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "322"
-            endingLineNumber = "322"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
+            landmarkName = "ImageProcessor::GenerateSobel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/image_processor.cpp"
+            timestampString = "526671920.987883"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
+            landmarkName = "ImageProcessor::GenerateSobel()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ImageProcessor::GenerateSobel()"
+                  moduleName = "SiloamLearn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/SiloamLearn/SiloamLearn/image_processor.cpp"
+                  timestampString = "526673055.117751"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "295"
+                  endingLineNumber = "295"
+                  offsetFromSymbolStart = "4338">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ImageProcessor::GenerateSobel()"
+                  moduleName = "SiloamLearn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/SiloamLearn/SiloamLearn/image_processor.cpp"
+                  timestampString = "526673055.120681"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "295"
+                  endingLineNumber = "295"
+                  offsetFromSymbolStart = "4752">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/image_processor.cpp"
+            timestampString = "526673576.642035"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
+            landmarkName = "ImageProcessor::GenerateSobel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/image_processor.cpp"
+            timestampString = "526671920.987883"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
+            landmarkName = "ImageProcessor::GenerateSobel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/image_processor.cpp"
+            timestampString = "526672227.220335"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "282"
+            endingLineNumber = "282"
+            landmarkName = "ImageProcessor::GenerateSobel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SiloamLearn/image_processor.cpp"
+            timestampString = "526673576.642035"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "312"
+            endingLineNumber = "312"
             landmarkName = "ImageProcessor::GenerateSobel()"
             landmarkType = "7">
          </BreakpointContent>

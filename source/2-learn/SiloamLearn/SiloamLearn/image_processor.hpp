@@ -41,20 +41,25 @@ public:
     
     void PrintPngInfo();
     
+    void PrintRgbPaths();
+    
     void GeneratePointClouds();
     
     void Segment();
     
     void GenerateSobel();
     
-    void PrintRgbPaths();
-    
 private:
+    
     std::string img_path_;
-    std::vector<std::string> all_png_paths_;
     std::vector<std::string> train_png_paths_;
     std::vector<std::string> test_png_paths_;
     std::vector<std::string> ground_truth_png_paths_;
+    
+    std::vector<std::string> all_segmented_png_paths_;
+    std::vector<std::string> segmented_train_png_paths_;
+    std::vector<std::string> segmented_test_png_paths_;
+    std::vector<std::string> segmented_ground_truth_png_paths_;
     
 };
 

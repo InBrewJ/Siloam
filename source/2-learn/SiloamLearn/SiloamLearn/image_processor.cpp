@@ -26,24 +26,25 @@ void ImageProcessor::GetDataset() {
          iter != end;
          ++iter)
     {
-        std::string name = iter->path().string();
-        if (regex_match(name, siloamlearn_pattern) && regex_match(name, train_pattern)) {
+        std::string file_name = iter->path().string();
+        if (regex_match(file_name, siloamlearn_pattern) && regex_match(file_name, train_pattern)) {
             read_png_file(iter->path().string().c_str());
             
             if( !dead_png() ) {
                 train_png_paths_.push_back(iter->path().string());
             } else {
                 // TODO: this needs testing...
+                // Or just pre-processing with Python PIL
                 std::cout << iter->path() << " is a dead PNG!" << "\n";
             }
             
-        } else if (regex_match(name, train_pattern)) {
+        } else if (regex_match(file_name, train_pattern)) {
             train_png_paths_.push_back(iter->path().string());
             
-        } else if (regex_match(name, test_pattern)) {
+        } else if (regex_match(file_name, test_pattern)) {
             test_png_paths_.push_back(iter->path().string());
             
-        } else if (regex_match(name, ground_truth_pattern)) {
+        } else if (regex_match(file_name, ground_truth_pattern)) {
             ground_truth_png_paths_.push_back(iter->path().string());
             
        }
@@ -213,6 +214,13 @@ void ImageProcessor::Segment() {
                             + "/"
                             + final_filename;
             
+            
+            
+            // Why don't we add seg files to their respective lists here?
+            // Because in the future there will be a -segment option for
+            // the command line which will be executed separately
+            // from the rest of the program because it takes so long...
+            
             write_png_file(output_path.c_str());
             
         }
@@ -235,8 +243,8 @@ void ImageProcessor::Segment() {
 
 void ImageProcessor::GenerateSobel() {
     
-    boost::regex i_pattern(".*forwards.*[I]\.png");
-    boost::regex d_pattern(".*forwards.*[D]\.png");
+    boost::regex i_pattern(".*[I]\.png");
+    boost::regex d_pattern(".*[D]\.png");
     std::string output_path = "";
     std::string final_filename = "";
     Mat current_image;
@@ -247,26 +255,50 @@ void ImageProcessor::GenerateSobel() {
     int delta = 0;
     int ddepth = CV_16S;
     
-    // Concatenate all the png paths together so we can
-    // find the I and D images in one loop
+    // Find all the generated segmented images
     
-    all_png_paths_ = train_png_paths_;
+    path current_dir(img_path_);
     
-    all_png_paths_.insert(all_png_paths_.end(), test_png_paths_.begin()
-                                              , test_png_paths_.end()
-                          );
+    boost::regex train_pattern(".*train.*forwards.*_seg\.png");
+    boost::regex test_pattern(".*test.*forwards.*_seg\.png");
+    boost::regex ground_truth_pattern(".*gt.*forwards.*_seg\.png");
+    boost::regex siloamlearn_pattern(".*SiloamLearn.*\.png");
     
-    all_png_paths_.insert(all_png_paths_.end(), ground_truth_png_paths_.begin()
-                                              , ground_truth_png_paths_.end()
-                          );
-    std::cout << "Size of all_png_paths_: " << all_png_paths_.size() << std::endl;
+    for (recursive_directory_iterator iter(current_dir), end;
+         iter != end;
+         ++iter)
+    {
+        std::string file_name = iter->path().string();
+        
+        // add all to segmented images
+        // then add to each of training/test/ground truth
+        // depending on the regex
+        
+        if ( regex_match(file_name, train_pattern) || regex_match(file_name, siloamlearn_pattern) ) {
+            all_segmented_png_paths_.push_back(file_name);
+            segmented_train_png_paths_.push_back(file_name);
+        
+        } else if ( regex_match(file_name, test_pattern) ) {
+            all_segmented_png_paths_.push_back(file_name);
+            segmented_test_png_paths_.push_back(file_name);
+        
+        } else if ( regex_match(file_name, ground_truth_pattern) ) {
+            all_segmented_png_paths_.push_back(file_name);
+            segmented_ground_truth_png_paths_.push_back(file_name);
+        
+        }
+        
+    }
     
-    for (auto const& path: all_png_paths_) {
+    std::cout << "Size of all_segmented_png_paths_: " << all_segmented_png_paths_.size() << std::endl;
+    
+    for (auto const& path: all_segmented_png_paths_) {
         if ( regex_match(path, i_pattern) || regex_match(path, d_pattern) ) {
             // Generate Ix, Iy, Imag, Ixx, Iyy, Ixy
             // Dx, Dy and DMag
             current_image = imread(path.c_str());
             class path current_image_subset(path);
+            std::string parent_path = current_image_subset.parent_path().string();
             
             GaussianBlur( current_image,
                           current_image,
@@ -287,19 +319,18 @@ void ImageProcessor::GenerateSobel() {
             // Imag or Dmag (approximation)
             addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
             
-            std::string sandbox = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox";
+            //std::string sandbox = "/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/sandbox";
             
             // Write I or D files
             if ( regex_match(path, i_pattern) ) {
-                imwrite( sandbox + "/Ix.png", grad_x );
-                imwrite( sandbox + "/Iy.png", grad_y );
-                imwrite( sandbox + "/Imag.png", grad);
+                imwrite( parent_path + "/Ix_seg.png", grad_x );
+                imwrite( parent_path + "/Iy_seg.png", grad_y );
+                imwrite( parent_path + "/Imag_seg.png", grad);
             } else if ( regex_match(path, d_pattern) ) {
-                imwrite( sandbox + "/Dx.png", grad_x );
-                imwrite( sandbox + "/Dy.png", grad_y );
-                imwrite( sandbox + "/Dmag.png", grad);
+                imwrite( parent_path + "/Dx_seg.png", grad_x );
+                imwrite( parent_path + "/Dy_seg.png", grad_y );
+                imwrite( parent_path + "/Dmag_seg.png", grad);
             }
-            
             
             if ( regex_match(path, i_pattern) ) {
             
@@ -319,9 +350,9 @@ void ImageProcessor::GenerateSobel() {
                 convertScaleAbs( grad_xy, abs_grad_xy );
                 
                 // Write I specific files HERE
-                imwrite( sandbox + "/Ixx.png", grad_xx );
-                imwrite( sandbox + "/Iyy.png", grad_yy );
-                imwrite( sandbox + "/Ixy.png", grad_xy);
+                imwrite( parent_path + "/Ixx_seg.png", grad_xx );
+                imwrite( parent_path + "/Iyy_seg.png", grad_yy );
+                imwrite( parent_path + "/Ixy_seg.png", grad_xy);
             }
         }
     }
