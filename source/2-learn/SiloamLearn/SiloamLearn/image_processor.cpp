@@ -17,6 +17,12 @@ ImageProcessor::ImageProcessor(std::string img_path) {
 void ImageProcessor::GetDataset() {
     path current_dir(img_path_);
     
+    // TODO: only add the even numbered cameras to the path
+    // regex: "^\d*[02468]$" (or something like that)
+    // The segmentation algo doesnt work too well on the odd
+    // cameras because there is far less floor in the bottom
+    // quarter of the image
+    
     boost::regex train_pattern(".*train.*forwards.*\.png");
     boost::regex test_pattern(".*test.*forwards.*\.png");
     boost::regex ground_truth_pattern(".*gt.*forwards.*\.png");
