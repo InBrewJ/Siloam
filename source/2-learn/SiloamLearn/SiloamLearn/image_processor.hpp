@@ -19,19 +19,20 @@
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
 #include <cstring>
-#include "png_utilities.hpp"
 #include <cv.h>
 #include <highgui.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "png_utilities.hpp"
+#include "label_parser.hpp"
 
 using namespace boost::filesystem;
 
 class ImageProcessor {
 public:
     
-    ImageProcessor(std::string img_path);
+    ImageProcessor(std::string img_path, std::string label_file_path);
     
     inline void PrintProcessingPath() {
         std::cout << img_path_ << std::endl;
@@ -49,7 +50,14 @@ public:
     
     void GenerateSobel();
     
+    void WriteSvmTrainFile(std::string svm_train_file_path);
+    
 private:
+    
+    // Label parser for use in GetDataset() and
+    // WriteSvmTrainFile(std::string svm_train_file_path)
+    
+    LabelParser label_parser_;
     
     std::string img_path_;
     std::vector<std::string> train_png_paths_;

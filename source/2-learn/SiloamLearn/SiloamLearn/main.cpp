@@ -24,12 +24,13 @@ int main(int argc, const char * argv[]) {
     
     // The path below will be defined as a command line argument in the future
     
-    ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders");
+    ImageProcessor image_processor("/Users/LordNelson/Documents/Work/LiverpoolUni/DissertationStore/2-learn/renders",
+                                   "/Users/LordNelson/Dropbox/Work/LiverpoolUni/Modules/Dissertation/repo/source/2-learn/labelled.dat");
     
     image_processor.GetDataset();
     //image_processor.GeneratePointClouds();
     //image_processor.Segment();
-    image_processor.GenerateSobel();
+    //image_processor.GenerateSobel();
     
     
     return 0;

@@ -14,6 +14,7 @@
 		2A1C3F381F5DA3EA000C3870 /* libopencv_highgui.3.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1C3F371F5DA3EA000C3870 /* libopencv_highgui.3.3.0.dylib */; };
 		2A1C3F3A1F62DE24000C3870 /* libopencv_core.3.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1C3F391F62DE24000C3870 /* libopencv_core.3.3.0.dylib */; };
 		2A1C3F3C1F62E009000C3870 /* libopencv_imgcodecs.3.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1C3F3B1F62E009000C3870 /* libopencv_imgcodecs.3.3.0.dylib */; };
+		2A1C3F3F1F6AB79E000C3870 /* label_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A1C3F3D1F6AB79E000C3870 /* label_parser.cpp */; };
 		2A7A8C381F3D875C005B7A21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C371F3D875C005B7A21 /* main.cpp */; };
 		2A7A8C401F3F697F005B7A21 /* feature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C3E1F3F697F005B7A21 /* feature.cpp */; };
 		2A7A8C431F3F699A005B7A21 /* rbf_svm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A7A8C411F3F699A005B7A21 /* rbf_svm.cpp */; };
@@ -47,6 +48,8 @@
 		2A1C3F371F5DA3EA000C3870 /* libopencv_highgui.3.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.3.0.dylib; path = ../../../../../../../../../../../usr/local/Cellar/opencv/3.3.0_3/lib/libopencv_highgui.3.3.0.dylib; sourceTree = "<group>"; };
 		2A1C3F391F62DE24000C3870 /* libopencv_core.3.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.3.0.dylib; path = ../../../../../../../../../../../usr/local/Cellar/opencv/3.3.0_3/lib/libopencv_core.3.3.0.dylib; sourceTree = "<group>"; };
 		2A1C3F3B1F62E009000C3870 /* libopencv_imgcodecs.3.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.3.3.0.dylib; path = ../../../../../../../../../../../usr/local/Cellar/opencv/3.3.0_3/lib/libopencv_imgcodecs.3.3.0.dylib; sourceTree = "<group>"; };
+		2A1C3F3D1F6AB79E000C3870 /* label_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = label_parser.cpp; sourceTree = "<group>"; };
+		2A1C3F3E1F6AB79E000C3870 /* label_parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = label_parser.hpp; sourceTree = "<group>"; };
 		2A7A8C341F3D875C005B7A21 /* SiloamLearn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SiloamLearn; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A7A8C371F3D875C005B7A21 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2A7A8C3E1F3F697F005B7A21 /* feature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = feature.cpp; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 				2A7A8C481F3F6EF1005B7A21 /* image_processor.hpp */,
 				2AAFD1A91F43C42A00E92D7D /* png_utilities.hpp */,
 				2AAFD1AC1F43C7F500E92D7D /* png_utilities.cpp */,
+				2A1C3F3D1F6AB79E000C3870 /* label_parser.cpp */,
+				2A1C3F3E1F6AB79E000C3870 /* label_parser.hpp */,
 			);
 			path = SiloamLearn;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 				2A1C3F341F5D4EC1000C3870 /* cluster_data.cpp in Sources */,
 				2A1C3F321F5D4E96000C3870 /* utils.cpp in Sources */,
 				2A1C3F301F5D4E81000C3870 /* dbscan.cpp in Sources */,
+				2A1C3F3F1F6AB79E000C3870 /* label_parser.cpp in Sources */,
 				2A7A8C4F1F3F82BC005B7A21 /* svm.cpp in Sources */,
 				2A7A8C431F3F699A005B7A21 /* rbf_svm.cpp in Sources */,
 				2A7A8C401F3F697F005B7A21 /* feature.cpp in Sources */,

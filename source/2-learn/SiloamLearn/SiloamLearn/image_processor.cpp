@@ -10,22 +10,23 @@
 
 using namespace cv;
 
-ImageProcessor::ImageProcessor(std::string img_path) {
-    img_path_ = img_path;
-}
+ImageProcessor::ImageProcessor(std::string img_path, std::string label_file_path)
+        : img_path_(img_path),  label_parser_(label_file_path) {}
 
 void ImageProcessor::GetDataset() {
     path current_dir(img_path_);
     
-    // TODO: only add the even numbered cameras to the path
-    // regex: "^\d*[02468]$" (or something like that)
+    label_parser_.GetUsableData();
+    
+    // Only add the even numbered cameras to the path
+    // regex addition: "^\d*[02468]$"
     // The segmentation algo doesnt work too well on the odd
     // cameras because there is far less floor in the bottom
     // quarter of the image
     
-    boost::regex train_pattern(".*train.*forwards.*\.png");
-    boost::regex test_pattern(".*test.*forwards.*\.png");
-    boost::regex ground_truth_pattern(".*gt.*forwards.*\.png");
+    boost::regex train_pattern(".*train.*forwards[02468].*\.png");
+    boost::regex test_pattern(".*test.*forwards[02468].*\.png");
+    boost::regex ground_truth_pattern(".*gt.*forwards[02468].*\.png");
     boost::regex siloamlearn_pattern(".*SiloamLearn.*\.png");
     
     for (recursive_directory_iterator iter(current_dir), end;
@@ -265,9 +266,9 @@ void ImageProcessor::GenerateSobel() {
     
     path current_dir(img_path_);
     
-    boost::regex train_pattern(".*train.*forwards.*_seg\.png");
-    boost::regex test_pattern(".*test.*forwards.*_seg\.png");
-    boost::regex ground_truth_pattern(".*gt.*forwards.*_seg\.png");
+    boost::regex train_pattern(".*train.*forwards[02468].*_seg\.png");
+    boost::regex test_pattern(".*test.*forwards[02468].*_seg\.png");
+    boost::regex ground_truth_pattern(".*gt.*forwards[02468].*_seg\.png");
     boost::regex siloamlearn_pattern(".*SiloamLearn.*\.png");
     
     for (recursive_directory_iterator iter(current_dir), end;
