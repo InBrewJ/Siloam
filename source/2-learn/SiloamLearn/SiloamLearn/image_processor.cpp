@@ -35,6 +35,8 @@ void ImageProcessor::GetDataset() {
     
     for (auto const& usable_datum: usable_data) {
         // There are checks for if it is a proper directory and if it exists as below:
+        // should probably throw some sort of exception if the directory does
+        // not exist - or maybe just return an enum error code or something?
         //if ( fs::exists(someDir) && fs::is_directory(someDir))
         //{}
         
@@ -277,6 +279,8 @@ void ImageProcessor::GenerateSobel() {
     int scale = 1;
     int delta = 0;
     int ddepth = CV_16S;
+    
+    // TODO: this needs redoing with the new label_parser_ method
     
     // Find all the generated segmented images
     
