@@ -16,7 +16,7 @@ ImageProcessor::ImageProcessor(std::string img_path, std::string label_file_path
 void ImageProcessor::GetDataset() {
     path current_dir(img_path_);
     
-    label_parser_.GetUsableData();
+    std::vector<std::string> usable_data = label_parser_.GetUsableData();
     
     // Only add the even numbered cameras to the path
     // regex addition: "^\d*[02468]$"
@@ -24,37 +24,53 @@ void ImageProcessor::GetDataset() {
     // cameras because there is far less floor in the bottom
     // quarter of the image
     
-    boost::regex train_pattern(".*train.*forwards[02468].*\.png");
-    boost::regex test_pattern(".*test.*forwards[02468].*\.png");
-    boost::regex ground_truth_pattern(".*gt.*forwards[02468].*\.png");
+    boost::regex not_seg_pattern("^(?!.*\_seg).*$");
+    boost::regex train_pattern(".*train.*forwards[1]?[02468].*\.png");
+    boost::regex test_pattern(".*test.*forwards[1]?[02468].*\.png");
+    boost::regex ground_truth_pattern(".*gt.*forwards[1]?[02468].*\.png");
     boost::regex siloamlearn_pattern(".*SiloamLearn.*\.png");
+    
+    // Iterate through usable_data vector and add the D, I and N images to
+    // each of the path vectors
+    
+    for (auto const& usable_datum: usable_data) {
+        // There are checks for if it is a proper directory and if it exists as below:
+        //if ( fs::exists(someDir) && fs::is_directory(someDir))
+        //{}
+        
+        path current_datum(usable_datum);
+        
+        for ( directory_iterator iter(current_datum.parent_path()), end; iter != end; ++iter ) {
+            
+            std::string file_name = iter->path().string();
+            
+            if (regex_match(file_name, not_seg_pattern)) {
+            
+                if (regex_match(file_name, train_pattern)) {
+                    train_png_paths_.push_back(iter->path().string());
+                    
+                } else if (regex_match(file_name, test_pattern)) {
+                    test_png_paths_.push_back(iter->path().string());
+                    
+                } else if (regex_match(file_name, ground_truth_pattern)) {
+                    ground_truth_png_paths_.push_back(iter->path().string());
+                    
+                }
+            }
+        }
+    }
+    
+    // Then iterate through the SiloamLearn directory with all of the
+    // renders from the Trimble models and add them to the dataset
     
     for (recursive_directory_iterator iter(current_dir), end;
          iter != end;
          ++iter)
     {
         std::string file_name = iter->path().string();
-        if (regex_match(file_name, siloamlearn_pattern) && regex_match(file_name, train_pattern)) {
-            read_png_file(iter->path().string().c_str());
-            
-            if( !dead_png() ) {
-                train_png_paths_.push_back(iter->path().string());
-            } else {
-                // TODO: this needs testing...
-                // Or just pre-processing with Python PIL
-                std::cout << iter->path() << " is a dead PNG!" << "\n";
-            }
-            
-        } else if (regex_match(file_name, train_pattern)) {
+        if (regex_match(file_name, siloamlearn_pattern)) {
             train_png_paths_.push_back(iter->path().string());
-            
-        } else if (regex_match(file_name, test_pattern)) {
-            test_png_paths_.push_back(iter->path().string());
-            
-        } else if (regex_match(file_name, ground_truth_pattern)) {
-            ground_truth_png_paths_.push_back(iter->path().string());
-            
-       }
+        }
     }
 }
 
